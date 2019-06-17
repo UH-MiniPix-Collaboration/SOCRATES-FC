@@ -17,42 +17,43 @@ int samples[NUMSAMPLES]; //mux0 8 thermistors
 
 
 // multiplexer variables
-int pinOut_S0 = 2; // IC pin 11, digital select
-int pinOut_S1 = 3; // IC pin 10, digital select
-int pinOut_S2 = 4; // IC pin 9, digital select
-int pinInMux0 = A0; // mux0 pin 3, analog read
-int pinInMux1 = A1; // mux1 pin 3, analog read
+#define pinOut_S0 2 // IC pin 11, digital select
+#define pinOut_S1 3 // IC pin 10, digital select
+#define pinOut_S2 4 // IC pin 9, digital select
+#define pinInMux0 A0 // mux0 pin 3, analog read
+#define pinInMux1 A1 // mux1 pin 3, analog read
 float muxState[SENSORCOUNT] = {0}; // to hold temps
 //int sensorValue = 0;
 int muxSelect = 0; //used to increment through muxes
 
-void setup() 
+void convertToTemp()
 {
-  // put your setup code here, to run once:
-  pinMode(pinOut_S0, OUTPUT);
-  pinMode(pinOut_S1, OUTPUT);
-  pinMode(pinOut_S2, OUTPUT);
-  Serial.begin(9600); // 9600 bit/s serial
-}
-
-void loop() 
-{
-  //Serial.println("Reading Mux0"); //Debug serial monitor
-  muxSelect = 0; //Select mux0
-  updateTemperatureMux(); //Sample mux0 pins
-  //Serial.println("Reading Mux1"); //Debug serial monitor
-  muxSelect = 1; //Select mux1
-  updateTemperatureMux(); //Sample mux1 pins
-  
-  /* //Debug serial monitor loop
-  for (int i = 0; i <= SENSORCOUNT; i++)
+  // convert the value to resistance by steinhart equation
+  average = 1023 / average - 1;
+  average = SERIESRESISTOR / average;
+  steinhart = average / THERMISTORNOMINAL;     // (R/Ro)
+  steinhart = log(steinhart);                  // ln(R/Ro)
+  steinhart /= BCOEFFICIENT;                   // 1/B * ln(R/Ro)
+  steinhart += 1.0 / (TEMPERATURENOMINAL + 273.15); // + (1/To)
+  steinhart = 1.0 / steinhart;                 // Invert
+  steinhart -= 273.15;                         // convert to C
+  if (steinhart == -273.15) // if zero make it zero.
+    steinhart = 0.0;
+    
+  muxState[index] = steinhart;
+  /* //Debug serial monitor
+  Serial.print("Temperature "); 
+  Serial.print(steinhart);
+  Serial.print(muxState[count]);
+  Serial.println(" *C");*/
+  if(index<SENSORCOUNT) // increment counter tracking sensor number
+    index++; //
+  else
   {
-    Serial.print(muxState[i]);
-    Serial.print(" ");
-    delay(10);
+    //Serial.println("count reset"); //Debug serial monitor
+    index = 0; //
   }
-  Serial.print("Looping\n");
-  delay(10);*/
+  delay(10);
 }
 
 void updateTemperatureMux()
@@ -99,32 +100,22 @@ void updateTemperatureMux()
   }
 }
 
-void convertToTemp()
+float* readMux()
 {
-  // convert the value to resistance by steinhart equation
-  average = 1023 / average - 1;
-  average = SERIESRESISTOR / average;
-  steinhart = average / THERMISTORNOMINAL;     // (R/Ro)
-  steinhart = log(steinhart);                  // ln(R/Ro)
-  steinhart /= BCOEFFICIENT;                   // 1/B * ln(R/Ro)
-  steinhart += 1.0 / (TEMPERATURENOMINAL + 273.15); // + (1/To)
-  steinhart = 1.0 / steinhart;                 // Invert
-  steinhart -= 273.15;                         // convert to C
-  if (steinhart == -273.15) // if zero make it zero.
-    steinhart = 0.0;
-    
-  muxState[index] = steinhart;
-  /* //Debug serial monitor
-  Serial.print("Temperature "); 
-  Serial.print(steinhart);
-  Serial.print(muxState[count]);
-  Serial.println(" *C");*/
-  if(index<SENSORCOUNT) // increment counter tracking sensor number
-    index++; //
-  else
+  //Serial.println("Reading Mux0"); //Debug serial monitor
+  muxSelect = 0; //Select mux0
+  updateTemperatureMux(); //Sample mux0 pins
+  //Serial.println("Reading Mux1"); //Debug serial monitor
+  muxSelect = 1; //Select mux1
+  updateTemperatureMux(); //Sample mux1 pins
+  return muxState;
+  /* //Debug serial monitor loop
+  for (int i = 0; i <= SENSORCOUNT; i++)
   {
-    //Serial.println("count reset"); //Debug serial monitor
-    index = 0; //
+    Serial.print(muxState[i]);
+    Serial.print(" ");
+    delay(10);
   }
-  delay(10);
+  Serial.print("Looping\n");
+  delay(10);*/
 }

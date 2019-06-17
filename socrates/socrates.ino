@@ -6,9 +6,9 @@
 void setup() {
   Serial.begin(baudRate);
 
-  actuator.attach(actuatorSignalPin);
+  actuator.attach(ACTUATOR_SIGNAL_PIN);
 
-  // Pins used for reading serial input
+  // Pins used for reading test serial input
   pinMode(actuatorPin, OUTPUT);
   pinMode(motorPin, OUTPUT);
 

@@ -1,7 +1,7 @@
 // Used this for reference: https://forum.arduino.cc/index.php?topic=45282.0
 
-#include "multiplexers.h"
-#include "pressureSensor.h"
+#include "sampleThermistors.h"
+//#include "pressureSensor.h"
 
 #define NUM_DATA_INPUTS 40;  // Number of data inputs we have
 
@@ -59,12 +59,12 @@ void buildPacket()
   datapacket packet;
   packet.packetNum = num;
 
-  p.ambPressure = getAmbientPressure();
+  //packet.ambPressure = getAmbientPressure();
 
   // ** Call multiplexers here **
-  //float* thermValues = readMux();
+  float* thermValues = readMux();
 
   // Downlink the packet
   sendPacket(packet);
-  num++;
+  num++;  // Increment data packet number
 }
