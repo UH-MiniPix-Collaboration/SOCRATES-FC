@@ -5,18 +5,16 @@
 
 #define NUM_DATA_INPUTS 40;  // Number of data inputs we have
 
-int num = 0;
+int pNum = 0;  // Keep track of packet number
 
 // Sample data packet
 struct datapacket
 {
-  //unsigned char byteArray[NUM_DATA_INPUTS];
   int packetNum;
+  float ambPressure;
+  float issPressure;
   float thermistors[14];
-    float cellVoltages[12];
-    float cellCurrents[12];
-    float ambPressure;
-  // ... add variables for remaining data values ...
+  float photodiodes[4];
 };
 
 // **********TODO**********
@@ -27,26 +25,23 @@ void sendPacket(datapacket p)
   Serial.print(p.packetNum);
   Serial.print(",");
 
+  Serial.print(p.ambPressure);
+  Serial.print(",");
+
+  Serial.print(p.issPressure);
+  Serial.print(",");
+
   for (int i = 0; i < 14; i++)
   {
     Serial.print(p.thermistors[i]);
     Serial.print(",");
   }
 
-  for (int i = 0; i < 12; i++)
+  for (int i = 0; i < 4; i++)
   {
-    Serial.print(p.cellVoltages[i]);
+    Serial.print(p.photodiodes[i]);
     Serial.print(",");
   }
-
-  for (int i = 0; i < 12; i++)
-  {
-    Serial.print(p.cellCurrents[i]);
-    Serial.print(",");
-  }
-
-  Serial.print(p.ambPressure);
-  Serial.print(",");
 
   Serial.println();  // End the packet with \n
   Serial.flush();
@@ -57,14 +52,26 @@ void buildPacket()
 {
   // Read through each data input pin; add each data value to the struct
   datapacket packet;
-  packet.packetNum = num;
+  packet.packetNum = pNum;
 
   //packet.ambPressure = getAmbientPressure();
+  //packet.issPressure = getIssPressure();
 
-  // ** Call multiplexers here **
-  float* thermValues = readMux();
+  // ** Call temperature multiplexers here **
+  /*
+    float* thermValues = readTempMux();
+    for (int i = 0; i < 14; i++)
+    p.thermistors[i] = thermValues[i];
+  */
+
+  // ** Call photodiode multiplexer here **
+  /*
+    float* photoValues = readPhotoMux();
+    for (int i = 0; i < 14; i++)
+    p.photodiodes[i] = photoValues[i];
+  */
 
   // Downlink the packet
   sendPacket(packet);
-  num++;  // Increment data packet number
+  pNum++;  // Increment packet number
 }

@@ -100,7 +100,7 @@ void updateTemperatureMux()
   }
 }
 
-float* readMux()
+float* readTempMux()
 {
   //Serial.println("Reading Mux0"); //Debug serial monitor
   muxSelect = 0; //Select mux0

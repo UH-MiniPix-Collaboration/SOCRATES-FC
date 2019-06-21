@@ -1,8 +1,6 @@
+/*
 #include <Arduino.h>
 #include <Servo.h>
-
-#define ACTUATOR_SIGNAL_PIN 6
-Servo actuator;
 
 void extendActuator(){
   actuator.write(180);  // set to 141 for 30 mm actuator
@@ -26,3 +24,4 @@ void testCycle()
     delay(30);                       // waits 15ms for the servo to reach the position
   }
 }
+*/

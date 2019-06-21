@@ -1,15 +1,20 @@
-#include "actuator.h"
+#include "autoCollectionArm.h"
+#include "pwmSweep.h"
 
-#define actuatorPin 6
-#define motorPin 7
-#define ACTUATOR_BYTE1        0x11
-#define ACTUATOR_BYTE2        0x12
-#define MOTOR_BYTE1           0x21
-#define MOTOR_BYTE2           0x22
+#define ASTROBIO_ON_BYTE1        0x11
+#define ASTROBIO_ON_BYTE2        0x12
+#define ASTROBIO_OFF_BYTE1       0x21
+#define ASTROBIO_OFF_BYTE2       0x22
+#define REBOOT_BYTE1             0x31
+#define REBOOT_BYTE2             0x32
+#define PWM_BYTE1                0x41
+#define PWM_BYTE2                0x41
 
-bool aState = false;
-bool mState = false;
 
+// https://www.instructables.com/id/two-ways-to-reset-arduino-in-software/
+void(* resetFunc) (void) = 0; //declare reset function @ address 0
+
+// Handles all HASP commands sent from the RPi as well as the internal command of pwm sweeping
 void processCommands()
 {
   // Read the serial input
@@ -23,27 +28,27 @@ void processCommands()
       command[i] = incomingByte;
     }
     Serial.flush();
-    if (command[0] == ACTUATOR_BYTE1 && command[1] == ACTUATOR_BYTE2)
+
+    // HASP command was received
+    if (numIncomingBytes == 2)
     {
-      aState = !aState;
-      if (aState)
+      // Turn on astrobiology system
+      if (command[0] == ASTROBIO_ON_BYTE1 && command[1] == ASTROBIO_ON_BYTE2)
       {
-        digitalWrite(6, HIGH);
-        extendActuator();
+        autoCollectionArm(0);
       }
-      else
+      else if (command[0] == ASTROBIO_OFF_BYTE1 && command[1] == ASTROBIO_OFF_BYTE2)
       {
-        digitalWrite(6, LOW);
-        retractActuator();
+        autoCollectionArm(1);
       }
-    }
-    else if (command[0] == MOTOR_BYTE1 && command[1] == MOTOR_BYTE2)
-    {
-      mState = !mState;
-      if (mState)
-        digitalWrite(7, HIGH);
-      else
-        digitalWrite(7, LOW);
+      else if (command[0] == REBOOT_BYTE1 && command[1] == REBOOT_BYTE2)
+      {
+        resetFunc();
+      }
+      else if (command[0] == PWM_BYTE1 && command[1] == PWM_BYTE2)
+      {
+        sweepAllCells();
+      }
     }
   }
 }
