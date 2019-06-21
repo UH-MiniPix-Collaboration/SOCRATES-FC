@@ -15,12 +15,8 @@ DRV8834 stepper(MOTOR_STEPS, DIR, STEP, M0, M1);
 
 void autoCollectionArm(float pressureReading) {
   if (pressureReading < 0.5) {
-    actuator.write(180);
-    delay(1500); // give actuator time to extend before activating motor
     stepper.rotate(360);
   } else if (pressureReading >= 0.5) {
     stepper.move(-MOTOR_STEPS * MICROSTEPS);
-    delay(1500);
-    actuator.write(0);
   }
 }
