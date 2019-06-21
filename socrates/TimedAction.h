@@ -1,6 +1,3 @@
-Skip to content
- 
-
 /* $Id: TimedAction.h 1198 2011-06-14 21:08:27Z bhagman $
 ||
 || @author         Alexander Brevig <abrevig@wiring.org.co>
@@ -21,7 +18,7 @@ Skip to content
 #ifndef TIMEDACTION_H
 #define TIMEDACTION_H
 
-#include <Wiring.h>
+#include <wiring_private.h>
 
 #define NO_PREDELAY 0
 
@@ -49,15 +46,4 @@ class TimedAction
 
 #endif
 // TIMEDACTION_H
-© 2019 GitHub, Inc.
-Terms
-Privacy
-Security
-Status
-Help
-Contact GitHub
-Pricing
-API
-Training
-Blog
-About
+//© 2019 GitHub, Inc.

@@ -36,12 +36,13 @@ void sendPacket(datapacket p)
     Serial.print(p.thermistors[i]);
     Serial.print(",");
   }
-
-  for (int i = 0; i < 4; i++)
-  {
-    Serial.print(p.photodiodes[i]);
-    Serial.print(",");
-  }
+  /*
+        for (int i = 0; i < 4; i++)
+        {
+        Serial.print(p.photodiodes[i]);
+        Serial.print(",");
+        }
+  */
 
   Serial.println();  // End the packet with \n
   Serial.flush();
@@ -58,17 +59,16 @@ void buildPacket()
   //packet.issPressure = getIssPressure();
 
   // ** Call temperature multiplexers here **
-  /*
-    float* thermValues = readTempMux();
-    for (int i = 0; i < 14; i++)
-    p.thermistors[i] = thermValues[i];
-  */
+  Serial.println("Calling mux");
+  float* thermValues = readTempMux();
+  for (int i = 0; i < 14; i++)
+    packet.thermistors[i] = thermValues[i];
 
   // ** Call photodiode multiplexer here **
   /*
     float* photoValues = readPhotoMux();
     for (int i = 0; i < 14; i++)
-    p.photodiodes[i] = photoValues[i];
+    packet.photodiodes[i] = photoValues[i];
   */
 
   // Downlink the packet

@@ -4,7 +4,7 @@
 // thermistors https://learn.adafruit.com/thermistor/using-a-thermistor
 
 // definitions and variabls for temperature sensing
-#define NUMSAMPLES 10 // number of samples for average
+#define NUMSAMPLES 4 // number of samples for average
 #define THERMISTORNOMINAL 10000 // resistance at 25 deg. C
 #define TEMPERATURENOMINAL 25 // temp. for nominal resistance
 #define BCOEFFICIENT 3950 // beta coefficient of thermistor (3000-4000)
@@ -41,6 +41,8 @@ void convertToTemp()
     steinhart = 0.0;
     
   muxState[index] = steinhart;
+  //Serial.print(muxState[index]);
+  //Serial.print(",");
   /* //Debug serial monitor
   Serial.print("Temperature "); 
   Serial.print(steinhart);

@@ -13,35 +13,46 @@ void sweepPWMPin(int pinNum)
   float cell2Voltages[60];
   float cell3Voltages[60];
   int var = 0;
-  while (var < 60)
+  while (var < 50)
   {
-    analogWrite(pinNum, var);
+    if (var == 49)
+    {
+      analogWrite(pinNum, var);
+      Serial.println("59");
+      delay(500);
+    }
+    else
+      delay(10);
+    analogWrite(pinNum, 0);
+
     // Read V0 for the three cells, save values to array
     var++;
     delay (10);  // ** May need to adjust this value **
   }
 
-  // Send the data to the Pi
-  for (int i = 0; i < 60; i++)
-  {
-    Serial.print(cell1Voltages[i]);
-    Serial.print(",");
-  }
-  Serial.println();
+  /*
+    // Send the data to the Pi
+    for (int i = 0; i < 60; i++)
+    {
+      Serial.print(cell1Voltages[i]);
+      Serial.print(",");
+    }
+    Serial.println();
 
-  for (int i = 0; i < 60; i++)
-  {
-    Serial.print(cell2Voltages[i]);
-    Serial.print(",");
-  }
-  Serial.println();
+    for (int i = 0; i < 60; i++)
+    {
+      Serial.print(cell2Voltages[i]);
+      Serial.print(",");
+    }
+    Serial.println();
 
-  for (int i = 0; i < 60; i++)
-  {
-    Serial.print(cell3Voltages[i]);
-    Serial.print(",");
-  }
-  Serial.println();
+    for (int i = 0; i < 60; i++)
+    {
+      Serial.print(cell3Voltages[i]);
+      Serial.print(",");
+    }
+    Serial.println();
+  */
 }
 
 // Performs the sweep

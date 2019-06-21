@@ -1,8 +1,9 @@
 #include <Arduino.h>
 #include <Servo.h>
 #include "DRV8834.h"
+#include "TimedAction.h"
 
-#include <TimedAction.h>
+//https://create.arduino.cc/projecthub/reanimationxp/how-to-multithread-an-arduino-protothreading-tutorial-dd2c37
 //NOTE: This library has an issue on newer versions of Arduino. After
 //      downloading the library you MUST go into the library directory and
 //      edit TimedAction.h. Within, overwrite WProgram.h with Arduino.h
@@ -17,16 +18,16 @@
 Servo actuator;
 DRV8834 stepper(MOTOR_STEPS, DIR, STEP, M0, M1);
 
-void spinStepper(){
+void spinStepperMotor() {
   stepper.rotate(360);
 }
 
-void stopStepper(){
+void stopStepperMotor() {
   stepper.move(-MOTOR_STEPS * MICROSTEPS);
 }
 
-TimedAction spinStepper = TimedAction(300,spinStepper);
-TimedAction stopStepper = TimedAction(300,stopStepper);
+TimedAction spinStepper = TimedAction(50, spinStepperMotor);
+TimedAction stopStepper = TimedAction(50, stopStepperMotor);
 
 void autoCollectionArm(float pressureReading) {
   if (pressureReading < 0.5) {
