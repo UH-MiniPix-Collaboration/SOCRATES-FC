@@ -9,7 +9,7 @@
 #define TEMPERATURENOMINAL 25 // temp. for nominal resistance
 #define BCOEFFICIENT 3950 // beta coefficient of thermistor (3000-4000)
 #define SERIESRESISTOR 10000 // "other" resistance "seen" by thermistor
-#define SENSORCOUNT 15
+#define SENSORCOUNT 14
 int index = 0; // muxState[] index
 float average; // average value of N samples
 float steinhart;
@@ -55,7 +55,7 @@ void convertToTemp()
     //Serial.println("count reset"); //Debug serial monitor
     index = 0; //
   }
-  delay(10);
+  delay(1);
 }
 
 void updateTemperatureMux()
@@ -89,7 +89,7 @@ void updateTemperatureMux()
         samples[j] = analogRead(pinInMux1); //store mux1 sample values
       }*/
       
-      delay(10);
+      delay(1);
     }
     average = 0; //clear average accumulator
     for(int j=0; j<NUMSAMPLES; j++)
@@ -98,16 +98,16 @@ void updateTemperatureMux()
     }
     average /= NUMSAMPLES; //final sample average
     convertToTemp(); //conversion to temperature value
-    delay(10);
+    delay(1);
   }
 }
 
 float* readTempMux()
 {
-  //Serial.println("Reading Mux0"); //Debug serial monitor
+  Serial.println("Reading Mux0"); //Debug serial monitor
   muxSelect = 0; //Select mux0
   updateTemperatureMux(); //Sample mux0 pins
-  //Serial.println("Reading Mux1"); //Debug serial monitor
+  Serial.println("Reading Mux1"); //Debug serial monitor
   muxSelect = 1; //Select mux1
   updateTemperatureMux(); //Sample mux1 pins
   return muxState;

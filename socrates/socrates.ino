@@ -8,7 +8,7 @@ void setup() {
   Serial.begin(baudRate);
 
   // Set up servos
-  stepper.begin(40, MICROSTEPS); // sets motor to RPM=40
+  stepper.begin(60, MICROSTEPS); // sets motor to RPM=60
   stepper.enable();
   actuator.attach(ACTUATOR_SIGNAL_PIN);
 

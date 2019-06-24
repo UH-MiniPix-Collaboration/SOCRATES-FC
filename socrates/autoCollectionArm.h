@@ -31,6 +31,7 @@ TimedAction stopStepper = TimedAction(50, stopStepperMotor);
 
 void autoCollectionArm(float pressureReading) {
   if (pressureReading < 0.5) {
+    Serial.println("Checking motor");
     spinStepper.check();
   } else if (pressureReading >= 0.5) {
     stopStepper.check();
