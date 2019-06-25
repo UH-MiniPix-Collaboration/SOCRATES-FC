@@ -32,9 +32,9 @@ boolean actuatorState;
 void checkActuator(boolean current, boolean old){
   if(old != current){
     if(current == True){
-      actuator.write(2000);
+      actuator.writeMicroseconds(2000);
     }else{
-      actuator.write(0);
+      actuator.writeMicroseconds(1000);
     }
   }
 }
