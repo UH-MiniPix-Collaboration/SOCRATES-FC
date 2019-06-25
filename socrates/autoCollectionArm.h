@@ -25,8 +25,16 @@
 #define ACTUATOR_SIGNAL_PIN 6
 Servo actuator;
 AccelStepper stepper(AccelStepper::FULL4WIRE, 7, 8, 9, 10);
+//boolean previous <--- finish me!
+boolean extendBool = False;
 
-
+void checkActuator(boolean check){
+  if(check == True){
+    actuator.write(2000);
+  }else{
+    actuator.write(0);
+  }
+}
 
 void spinStepperMotor() {
   stepper.setMaxSpeed(500);
@@ -45,9 +53,13 @@ void stopStepperMotor() {
 
 
 void autoCollectionArm(float pressureReading) {
-  if (pressureReading < 0.5) {
-    spinStepperMotor();
-  } else if (pressureReading >= 0.5) {
-    stopStepperMotor();
-  }
+   if (pressureReading == 1){
+     extendBool == True; 
+     checkActuator(extendBool);
+     spinStepperMotor();
+   }else if (pressureReading == 0){
+     extendBool == False;
+     checkActuator(extendBool);
+     stopStepperMotor();
+   }
 }
