@@ -1,7 +1,7 @@
 // Used this for reference: https://forum.arduino.cc/index.php?topic=45282.0
 
 #include "sampleThermistors.h"
-//#include "pressureSensor.h"
+#include "issSensor.h"
 
 #define NUM_DATA_INPUTS 40;  // Number of data inputs we have
 
@@ -12,12 +12,14 @@ struct datapacket
 {
   int packetNum;
   float ambPressure;
-  float issPressure;
+  float issPressure;  // In Pa
+  float issTemperature;  // In *C
   float thermistors[14];
   float photodiodes[4];
 };
 
 // **********TODO**********
+// Sends pre-compiled data to the serial port
 void sendPacket(datapacket p)
 {
   unsigned long bufferSize = sizeof(datapacket);  // Returns number of bytes
@@ -36,13 +38,12 @@ void sendPacket(datapacket p)
     Serial.print(p.thermistors[i]);
     Serial.print(",");
   }
-  /*
-        for (int i = 0; i < 4; i++)
-        {
-        Serial.print(p.photodiodes[i]);
-        Serial.print(",");
-        }
-  */
+
+  for (int i = 0; i < 4; i++)
+  {
+    Serial.print(p.photodiodes[i]);
+    Serial.print(",");
+  }
 
   Serial.println();  // End the packet with \n
   Serial.flush();
@@ -56,10 +57,11 @@ void buildPacket()
   packet.packetNum = pNum;
 
   //packet.ambPressure = getAmbientPressure();
-  //packet.issPressure = getIssPressure();
+  packet.issPressure = getISSPressure();
+  packet.issTemperature = getISSTemperature();
 
   // ** Call temperature multiplexers here **
-  Serial.println("Calling mux");
+  Serial.println("Calling mux");  // Used for debugging; comment out for final build
   float* thermValues = readTempMux();
   for (int i = 0; i < 14; i++)
     packet.thermistors[i] = thermValues[i];

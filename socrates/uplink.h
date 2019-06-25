@@ -12,6 +12,7 @@
 
 
 // https://www.instructables.com/id/two-ways-to-reset-arduino-in-software/
+// Restarts the Arduino
 void(* resetFunc) (void) = 0; //declare reset function @ address 0
 
 // Handles all HASP commands sent from the RPi as well as the internal command of pwm sweeping

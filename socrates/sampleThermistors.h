@@ -17,9 +17,9 @@ int samples[NUMSAMPLES]; //mux0 8 thermistors
 
 
 // multiplexer variables
-#define pinOut_S0 2 // IC pin 11, digital select
-#define pinOut_S1 3 // IC pin 10, digital select
-#define pinOut_S2 4 // IC pin 9, digital select
+#define pinOut_S0 11 // IC pin 11, digital select
+#define pinOut_S1 12 // IC pin 10, digital select
+#define pinOut_S2 13 // IC pin 9, digital select
 #define pinInMux0 A0 // mux0 pin 3, analog read
 #define pinInMux1 A1 // mux1 pin 3, analog read
 float muxState[SENSORCOUNT] = {0}; // to hold temps
@@ -104,10 +104,10 @@ void updateTemperatureMux()
 
 float* readTempMux()
 {
-  Serial.println("Reading Mux0"); //Debug serial monitor
+  //Serial.println("Reading Mux0"); //Debug serial monitor
   muxSelect = 0; //Select mux0
   updateTemperatureMux(); //Sample mux0 pins
-  Serial.println("Reading Mux1"); //Debug serial monitor
+  //Serial.println("Reading Mux1"); //Debug serial monitor
   muxSelect = 1; //Select mux1
   updateTemperatureMux(); //Sample mux1 pins
   return muxState;

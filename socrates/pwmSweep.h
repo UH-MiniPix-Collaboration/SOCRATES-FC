@@ -6,6 +6,10 @@
 #define pwmPin4 5
 
 
+// ***** TO DO *****
+// Automate the PWM sweep every 30 min (1800 s) with protothreading (should be relatively simple)
+
+
 // Sweeps one group of cells and prints to serial. Ends each cell with "\n"
 void sweepPWMPin(int pinNum)
 {
