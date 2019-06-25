@@ -26,14 +26,18 @@
 Servo actuator;
 AccelStepper stepper(AccelStepper::FULL4WIRE, 7, 8, 9, 10);
 
+
+
 void spinStepperMotor() {
-  stepper.setSpeed(500);
+  stepper.setMaxSpeed(500);
+  stepper.setAcceleration(50);
   stepper.moveTo(360);
-  stepper.setSpeed(500);
+  //stepper.setSpeed(500);
+  // ^ may be needed - experiment 
 }
 
 void stopStepperMotor() {
-  stepper.setSpeed(500);
+  stepper.setAcceleration(-50);
   stepper.moveTo(0);
   stepper.setSpeed(0);
 }
