@@ -29,7 +29,7 @@ boolean previousExtendBool;
 boolean extendBool = False;
 boolean actuatorState;
 
-void checkActuator(boolean new, boolean old){
+void checkActuator(boolean new, old){
   if(old != new){
     if(new == True){
       actuator.write(2000);
