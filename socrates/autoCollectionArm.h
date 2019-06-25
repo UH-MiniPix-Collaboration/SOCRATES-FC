@@ -25,14 +25,19 @@
 #define ACTUATOR_SIGNAL_PIN 6
 Servo actuator;
 AccelStepper stepper(AccelStepper::FULL4WIRE, 7, 8, 9, 10);
-//boolean previous <--- finish me!
+boolean previousExtendBool;
 boolean extendBool = False;
+boolean actuatorState;
 
-void checkActuator(boolean check){
-  if(check == True){
-    actuator.write(2000);
-  }else{
-    actuator.write(0);
+void checkActuator(boolean new, boolean old){
+  if(old != new){
+    if(new == True){
+      actuator.write(2000);
+      return True;
+    }else{
+      actuator.write(0);
+      return False;
+    }
   }
 }
 
@@ -54,12 +59,16 @@ void stopStepperMotor() {
 
 void autoCollectionArm(float pressureReading) {
    if (pressureReading == 1){
-     extendBool == True; 
-     checkActuator(extendBool);
-     spinStepperMotor();
+     previousExtendBool = extendBool;
+     extendBool = True;
+     actuatorState = checkActuator(extendBool, previousExtendBool);
+     if(actuatorState == True){
+       spinStepperMotor();
+     }
    }else if (pressureReading == 0){
-     extendBool == False;
-     checkActuator(extendBool);
      stopStepperMotor();
+     previousExtendBool = extendBool;
+     extendBool == False;
+     actuatorState = checkActuator(extendBool, previousExtendBool);
    }
 }
