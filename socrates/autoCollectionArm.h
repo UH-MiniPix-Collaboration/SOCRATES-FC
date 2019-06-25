@@ -33,10 +33,8 @@ void checkActuator(boolean new, boolean old){
   if(old != new){
     if(new == True){
       actuator.write(2000);
-      return True;
     }else{
       actuator.write(0);
-      return False;
     }
   }
 }
@@ -61,14 +59,13 @@ void autoCollectionArm(float pressureReading) {
    if (pressureReading == 1){
      previousExtendBool = extendBool;
      extendBool = True;
-     actuatorState = checkActuator(extendBool, previousExtendBool);
-     if(actuatorState == True){
-       spinStepperMotor();
-     }
+     checkActuator(extendBool, previousExtendBool);
+     spinStepperMotor();
+     
    }else if (pressureReading == 0){
      stopStepperMotor();
      previousExtendBool = extendBool;
      extendBool == False;
-     actuatorState = checkActuator(extendBool, previousExtendBool);
+     checkActuator(extendBool, previousExtendBool);
    }
 }
