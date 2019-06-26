@@ -26,12 +26,14 @@
 Servo actuator;
 AccelStepper stepper(AccelStepper::FULL4WIRE, 7, 8, 9, 10);
 boolean previousExtendBool;
-boolean extendBool = False;
+boolean extendBool = false;
 boolean actuatorState;
 
 void checkActuator(boolean current, boolean old){
+  Serial.println(current);
+  Serial.println(old);
   if(old != current){
-    if(current == True){
+    if(current == true){
       actuator.writeMicroseconds(2000);
     }else{
       actuator.writeMicroseconds(1000);
@@ -56,16 +58,16 @@ void stopStepperMotor() {
 
 
 void autoCollectionArm(float pressureReading) {
-   if (pressureReading == 1){
+   if (pressureReading < 0.5){
      previousExtendBool = extendBool;
-     extendBool = True;
+     extendBool = true;
      checkActuator(extendBool, previousExtendBool);
      spinStepperMotor();
      
-   }else if (pressureReading == 0){
+   }else if (pressureReading >= 0.5){
      stopStepperMotor();
      previousExtendBool = extendBool;
-     extendBool == False;
+     extendBool == false;
      checkActuator(extendBool, previousExtendBool);
    }
 }

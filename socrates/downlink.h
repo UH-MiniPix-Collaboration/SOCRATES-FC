@@ -56,22 +56,20 @@ void buildPacket()
   datapacket packet;
   packet.packetNum = pNum;
 
-  //packet.ambPressure = getAmbientPressure();
-  packet.issPressure = getISSPressure();
-  packet.issTemperature = getISSTemperature();
+  packet.ambPressure = 6.2; //getAmbientPressure();
+  packet.issPressure = 101000; //getISSPressure();
+  packet.issTemperature = 40; //getISSTemperature();
 
   // ** Call temperature multiplexers here **
-  Serial.println("Calling mux");  // Used for debugging; comment out for final build
-  float* thermValues = readTempMux();
+  //Serial.println("Calling mux");  // Used for debugging; comment out for final build
+  //float* thermValues = readTempMux();
   for (int i = 0; i < 14; i++)
-    packet.thermistors[i] = thermValues[i];
+    packet.thermistors[i] = 3.33; //thermValues[i];
 
   // ** Call photodiode multiplexer here **
-  /*
-    float* photoValues = readPhotoMux();
-    for (int i = 0; i < 14; i++)
-    packet.photodiodes[i] = photoValues[i];
-  */
+  //float* photoValues = readPhotoMux();
+  for (int i = 0; i < 14; i++)
+    packet.photodiodes[i] = 432.7; //photoValues[i];
 
   // Downlink the packet
   sendPacket(packet);

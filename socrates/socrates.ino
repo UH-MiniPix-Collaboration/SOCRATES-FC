@@ -1,5 +1,5 @@
 #include "uplink.h"
-#include "downlink.h"
+//#include "downlink.h"
 
 #define baudRate 4800
 
@@ -15,10 +15,10 @@ void setup() {
                   Adafruit_BMP280::STANDBY_MS_500); /* Standby time. */
 
   // Set up servos
-  stepper.begin(60, MICROSTEPS); // sets motor to RPM=60
-  stepper.enable();
   actuator.attach(ACTUATOR_SIGNAL_PIN);
-  
+  delay(10);
+  actuator.writeMicroseconds(1000);  // Ensure that the actuator starts retracted
+
   // Thermistor multiplexer pins
   pinMode(pinOut_S0, OUTPUT);
   pinMode(pinOut_S1, OUTPUT);
@@ -29,11 +29,14 @@ void setup() {
   pinMode(pwmPin2, OUTPUT);
   pinMode(pwmPin3, OUTPUT);
   pinMode(pwmPin4, OUTPUT);
+
+  // LED test pin
+  pinMode(52, OUTPUT);
 }
 
 void loop() {
   processCommands();
-  buildPacket();
+  //buildPacket();
   //autoCollectionArm(getAmbPressure());
   //delay(1000);
 }
