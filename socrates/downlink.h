@@ -32,6 +32,9 @@ void sendPacket(datapacket p)
 
   Serial.print(p.issPressure);
   Serial.print(",");
+  
+  Serial.print(p.issTemperature);
+  Serial.print(",");
 
   for (int i = 0; i < 14; i++)
   {
@@ -55,10 +58,9 @@ void buildPacket()
   // Read through each data input pin; add each data value to the struct
   datapacket packet;
   packet.packetNum = pNum;
-
   packet.ambPressure = 6.2; //getAmbientPressure();
-  packet.issPressure = 101000; //getISSPressure();
-  packet.issTemperature = 40; //getISSTemperature();
+  packet.issPressure = 111.0;//getISSPressure();
+  packet.issTemperature = getISSTemperature();
 
   // ** Call temperature multiplexers here **
   //Serial.println("Calling mux");  // Used for debugging; comment out for final build

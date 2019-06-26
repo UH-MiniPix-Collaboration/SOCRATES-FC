@@ -30,8 +30,6 @@ boolean extendBool = false;
 boolean actuatorState;
 
 void checkActuator(boolean current, boolean old){
-  Serial.println(current);
-  Serial.println(old);
   if(old != current){
     if(current == true){
       actuator.writeMicroseconds(2000);
