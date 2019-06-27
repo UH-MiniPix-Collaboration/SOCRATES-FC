@@ -65,7 +65,7 @@ void autoCollectionArm(float pressureReading) {
    }else if (pressureReading >= 0.5){
      stopStepperMotor();
      previousExtendBool = extendBool;
-     extendBool == false;
+     extendBool = false;
      checkActuator(extendBool, previousExtendBool);
    }
 }
