@@ -35,14 +35,17 @@ void processCommands()
     if (command[1] != 0)
     {
       // Turn on astrobiology system
-      if (command[0] == ASTROBIO_ON_BYTE1 && command[1] == ASTROBIO_ON_BYTE2)//(command[0] == 'A')
+      if (command[0] == ASTROBIO_ON_BYTE1 && command[1] == ASTROBIO_ON_BYTE2)//(command[0] == 'A')//
       {
+        //Serial.println("Stepping.");
+        //spinStepperMotor();
         autoCollectionArm(0);  // Force the astrobio system to deploy
       }
       // Turn off astrobiology system
-      else if (command[0] == ASTROBIO_OFF_BYTE1 && command[1] == ASTROBIO_OFF_BYTE2)//(command[0] == 'O')
+      else if (command[0] == ASTROBIO_OFF_BYTE1 && command[1] == ASTROBIO_OFF_BYTE2)//(command[0] == 'O')//
       {
-        autoCollectionArm(1);  // Force the astrobio system to retract
+        stopStepperMotor();
+        //autoCollectionArm(1);  // Force the astrobio system to retract
       }
       // Force SOCRATES to reboot
       else if (command[0] == REBOOT_BYTE1 && command[1] == REBOOT_BYTE2)
@@ -59,9 +62,15 @@ void processCommands()
         led = !led;
       }
       // Perform the PWM sweep
-      else if (command[0] == PWM_BYTE1 && command[1] == PWM_BYTE2)
+      else if (command[0] == PWM_BYTE1 && command[1] == PWM_BYTE2)//(command[0] == 'P')
       {
-        sweepAllCells();
+        Serial.println("Sweeping");
+        if (led)
+          digitalWrite(52, LOW);
+        else
+          digitalWrite(52, HIGH);
+        led = !led;
+        sweepCellGroup();
       }
     }
   }

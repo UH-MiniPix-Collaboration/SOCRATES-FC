@@ -1,71 +1,59 @@
 //https://www.youtube.com/watch?v=YCjiIpZaGsc
 
-#define pwmPin1 2
-#define pwmPin2 3
-#define pwmPin3 4
-#define pwmPin4 5
+// Pin used to output the PWM voltage sweep
+#define pwmOutput 8
+
+// Analog pins to read in mux values
+#define currentIn1 A2
 
 
-// ***** TO DO *****
-// Automate the PWM sweep every 30 min (1800 s) with protothreading (should be relatively simple)
-
-
-// Sweeps one group of cells and prints to serial. Ends each cell with "\n"
-void sweepPWMPin(int pinNum)
+// Sweeps one group of cells and prints to Pi. Ends each cell with "\n"
+void sweepCellGroup()
 {
-  float cell1Voltages[60];
-  float cell2Voltages[60];
-  float cell3Voltages[60];
+  float cell1Currents[60];
+  float cell2Currents[60];
+  float cell3Currents[60];
   int var = 0;
-  while (var < 50)
+  while (var < 60)
   {
-    if (var == 49)
-    {
-      analogWrite(pinNum, var);
-      Serial.println("59");
-      delay(500);
-    }
-    else
-      delay(10);
-    analogWrite(pinNum, 0);
+    analogWrite(pwmOutput, var);
+    delay(500);  // ** May need to adjust this value ** //
 
-    // Read V0 for the three cells, save values to array
+    // Read one group of cells, save values to arrays.
+    // Currently reading one cell. Add mux reading for group.
+    cell1Currents[var] = analogRead(currentIn1);
+    
     var++;
-    delay (10);  // ** May need to adjust this value **
   }
+  analogWrite(pwmOutput, 0);  // Reset the PWM output to 0 V
 
+  // Send the data to the Pi
+  for (int i = 0; i < 60; i++)
+  {
+    Serial.print(cell1Currents[i]);
+    Serial.print(",");
+  }
+  Serial.println();
+  
   /*
-    // Send the data to the Pi
-    for (int i = 0; i < 60; i++)
-    {
-      Serial.print(cell1Voltages[i]);
-      Serial.print(",");
-    }
-    Serial.println();
+      for (int i = 0; i < 60; i++)
+      {
+        Serial.print(cell2Currents[i]);
+        Serial.print(",");
+      }
+      Serial.println();
 
-    for (int i = 0; i < 60; i++)
-    {
-      Serial.print(cell2Voltages[i]);
-      Serial.print(",");
-    }
-    Serial.println();
-
-    for (int i = 0; i < 60; i++)
-    {
-      Serial.print(cell3Voltages[i]);
-      Serial.print(",");
-    }
-    Serial.println();
+      for (int i = 0; i < 60; i++)
+      {
+        Serial.print(cell3Currents[i]);
+        Serial.print(",");
+      }
+      Serial.println();
   */
 }
 
-// Performs the sweep
-void sweepAllCells()
+// ** TO DO ** //
+sweepAllCells()
 {
-  Serial.print("begin_pwm");  // Signal for the Pi to store pwm values
-  sweepPWMPin(pwmPin1);
-  sweepPWMPin(pwmPin2);
-  sweepPWMPin(pwmPin3);
-  sweepPWMPin(pwmPin4);
-  Serial.println("end_pwm");
+  // Sweep one group of cells then send data to Pi. Repeat for each cell group
 }

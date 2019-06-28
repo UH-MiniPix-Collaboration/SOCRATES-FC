@@ -16,6 +16,9 @@ void setup() {
                   Adafruit_BMP280::STANDBY_MS_500); /* Standby time. */
 
   // Set up servos
+  stepper.setCurrentPosition(0);
+  stepper.setMaxSpeed(2000);
+  stepper.setAcceleration(100);
   actuator.attach(ACTUATOR_SIGNAL_PIN);
   delay(10);
   actuator.writeMicroseconds(1000);  // Ensure that the actuator starts retracted
@@ -26,18 +29,24 @@ void setup() {
   pinMode(pinOut_S2, OUTPUT);
 
   // PWM sweep pins
-  pinMode(pwmPin1, OUTPUT);
-  pinMode(pwmPin2, OUTPUT);
-  pinMode(pwmPin3, OUTPUT);
-  pinMode(pwmPin4, OUTPUT);
+  pinMode(pwmOutput, OUTPUT);
 
   // LED test pin
   pinMode(52, OUTPUT);
+  pinMode(30, INPUT);
+  pinMode(32, INPUT);
 }
+float ambPressure = 1;
 
 void loop() {
   processCommands();
   //buildPacket();
-  //autoCollectionArm(getAmbPressure());
-  //delay(1000);
+  /*
+  if (digitalRead(30) == LOW)
+    ambPressure = 0.1;
+  if (digitalRead(32) == LOW)
+    ambPressure = 1;
+  autoCollectionArm(ambPressure);
+  */
+  stepper.run();
 }
