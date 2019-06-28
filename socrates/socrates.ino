@@ -17,7 +17,7 @@ void setup() {
 
   // Set up servos
   stepper.setCurrentPosition(0);
-  stepper.setMaxSpeed(2000);
+  stepper.setMaxSpeed(4000);
   stepper.setAcceleration(100);
   actuator.attach(ACTUATOR_SIGNAL_PIN);
   delay(10);
@@ -40,6 +40,8 @@ float ambPressure = 1;
 
 void loop() {
   processCommands();
+  if (manualCommand)
+    autoCollectionArm(0);
   //buildPacket();
   /*
   if (digitalRead(30) == LOW)

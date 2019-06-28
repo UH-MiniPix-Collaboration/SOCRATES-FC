@@ -30,6 +30,7 @@ Servo actuator;
 AccelStepper stepper(AccelStepper::FULL4WIRE, 10, 11, 12, 13);
 boolean previousExtendBool;
 boolean extendBool = false;
+boolean manualCommand = false;  // Control whether the system was activated manually
 
 void checkActuator(boolean current, boolean old) {
   if (old != current) {
@@ -43,17 +44,8 @@ void checkActuator(boolean current, boolean old) {
 
 // 1600 steps is a full revolution
 void spinStepperMotor() {
-  // Reset position to prevent integer overflow
-  if (stepper.currentPosition() >= 32000)
-  {
-    //Serial.println(stepper.currentPosition());
-    //Serial.println("Resetting position");
-    stepper.setCurrentPosition(stepper.currentPosition() - 32000);
-
-    // Need to reset max speed and acceleration when the position is reset
-    stepper.setMaxSpeed(1000);
-    stepper.setAcceleration(100);
-  }
+  if (stepper.currentPosition() % 32000 == 0)
+    Serial.println(stepper.currentPosition());
   stepper.moveTo(stepper.currentPosition() + 1600);
 
   //stepper.setSpeed(500);
@@ -61,10 +53,10 @@ void spinStepperMotor() {
 }
 
 void stopStepperMotor() {
-  int currentPos = stepper.currentPosition();
-  int stepsInRev = currentPos % 1600;
-  int stepsToZero = 1600 - stepsInRev + 1600;
-  int finalPos = currentPos + stepsToZero;
+  long currentPos = stepper.currentPosition();
+  long stepsInRev = currentPos % 1600;
+  long stepsToZero = 1600 - stepsInRev + 1600;
+  long finalPos = currentPos + stepsToZero;
   stepper.moveTo(finalPos);
   
   // Debug prints
@@ -92,6 +84,7 @@ void autoCollectionArm(float pressureReading) {
       stopStepperMotor();
     previousExtendBool = extendBool;
     extendBool = false;
+    manualCommand = false;
     checkActuator(extendBool, previousExtendBool);
   }
 }
