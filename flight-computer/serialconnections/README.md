@@ -1,0 +1,2 @@
+Defines the methods used for establishing the two serial connections required by the RPi.
+Defines the function that reads serial data from the Arduino and the function to send the data to the serial port

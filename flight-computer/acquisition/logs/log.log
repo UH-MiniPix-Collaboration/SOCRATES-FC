@@ -1,0 +1,30 @@
+################# LOG OPENED (16:53:38.057) ###################### 
+(16:53:38.057) [core]: Loading hw libraries (1)...
+(16:53:38.079) [core]: Added hw library minipix.so
+(16:53:38.114) [core]: Initializing hwlib minipix.so (1 devices)...
+(16:53:38.139) [core]: MiniPIX H06-W0239: No configuration for device MiniPIX-H06-W0239. Default will be used.
+(16:53:38.141) [core]: Stack Trace:
+1   0x7631f468 ./pxcore.so(+0x30468) [0x7631f468]
+2   0x7631efe8 ./pxcore.so(+0x2ffe8) [0x7631efe8]
+3   0x7632a8c8 ./pxcore.so(+0x3b8c8) [0x7632a8c8]
+4   0x7634275c ./pxcore.so(+0x5375c) [0x7634275c]
+5   0x76338ba0 ./pxcore.so(+0x49ba0) [0x76338ba0]
+6   0x76349c2c ./pxcore.so(+0x5ac2c) [0x76349c2c]
+7   0x7634976c ./pxcore.so(+0x5a76c) [0x7634976c]
+8   0x763492d4 ./pxcore.so(+0x5a2d4) [0x763492d4]
+9   0x763824b4 ./pxcore.so(+0x934b4) [0x763824b4]
+10  0x76383e68 pxInitialize + 44
+11  0x7697b850 PixetLoader::initPixet() + 100
+12  0x7697b214 /home/pi/Desktop/MiniPIX-RPI-Dosimeter/acquisition/pypixet.so(+0x2f214) [0x7697b214]
+
+
+(16:53:38.413) [core]: Loading plugins (0)...
+(16:53:38.419) [core]: MiniPIX H06-W0239: File Fixed_Config_MiniPIX-H06-W0239.xml does not exist
+(16:53:38.420) [core]: Stack Trace:
+1   0x7631f468 ./pxcore.so(+0x30468) [0x7631f468]
+2   0x7631efe8 ./pxcore.so(+0x2ffe8) [0x7631efe8]
+3   0x7632a900 ./pxcore.so(+0x3b900) [0x7632a900]
+4   0x7634275c ./pxcore.so(+0x5375c) [0x7634275c]
+5   0x769ab5b4 /home/pi/Desktop/MiniPIX-RPI-Dosimeter/acquisition/pypixet.so(+0x5f5b4) [0x769ab5b4]
+
+
