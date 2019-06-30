@@ -8,7 +8,7 @@ import struct as struct
 import logging
 from struct import *
 
-#Passing an array of voltages
+#Passing an array that holds voltage values
 #Voltage/current sweep will occur every 30 minutes. All other data will be stored every second onto the database
 def voltageSweep(voltages):
     UTCTimeString = str(datetime.datetime.now() + ".csv")
