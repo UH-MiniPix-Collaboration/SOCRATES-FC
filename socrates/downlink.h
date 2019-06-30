@@ -81,7 +81,7 @@ void buildPacket()
 
   // ** Call photodiode multiplexer here **
   //float* photoValues = readPhotoMux();
-  for (int i = 0; i < 14; i++)
+  for (int i = 0; i < 4; i++)
   {
     packet.photodiodes[i] = 432.7; //photoValues[i];
     stepper.run();
