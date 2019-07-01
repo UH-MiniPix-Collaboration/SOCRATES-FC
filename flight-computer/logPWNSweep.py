@@ -49,10 +49,28 @@ def performSweep(arduino_serial_conn):
     """
 
     
-#Stores the voltage values receieved from the arduino into csv files with the name as the timestamp
-def storeInCSVFies(voltages):
-    UTCTimeString =  str((datetime.datetime.now()+ ".csv"))
+"""
+Currently stores csv files in the same directory
 
+solar1 = [1,1,1]
+solar2 = [2,2,2]
+solar3 = [3,3,3]
+solar4 = [4,4,4]
+solar5 = [5,5,5]
+solar6 = [6,6,6]
+solar7 = [7,7,7]
+solar8 = [8,8,8]
+solar9 = [9,9,9]
+solar10 = [10,10,10]
+solar11 = [11,11,11]
+solar12 = [12,12,12]
+"""
+#Stores the voltage values receieved from the arduino into csv files with the name as the timestamp
+def storeInCSVFiles(voltages, solarCellNumber):
+    UTCTimeString =  solarCellNumber + str(datetime.datetime.now())
+    print(UTCTimeString)
+    
+    UTCTimeString = UTCTimeString+".csv"
     # Writes to the newly created csv file
     with open(UTCTimeString, mode='w+') as UTC_File:
         data_writer = csv.writer(UTC_File, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
@@ -61,6 +79,15 @@ def storeInCSVFies(voltages):
         for i in range(0, len(voltages)): #stores all of the voltages in a csv file
             data_writer.writerow([voltages[i]])
 
-for i in range(0,12):
-    voltageSweep("solar" + str(i))
-
+storeInCSVFiles(solar1, "solarOne-")
+storeInCSVFiles(solar2, "solarTwo-")
+storeInCSVFiles(solar3, "solarThree-")
+storeInCSVFiles(solar4, "solarFour-")
+storeInCSVFiles(solar5, "solarFive-")
+storeInCSVFiles(solar6, "solarSix-")
+storeInCSVFiles(solar7, "solarSeven-")
+storeInCSVFiles(solar8, "solarEight-")
+storeInCSVFiles(solar9, "solarNine-")
+storeInCSVFiles(solar10, "solarTen-")
+storeInCSVFiles(solar11, "solarEleven-")
+storeInCSVFiles(solar12, "solarTwelve-")
