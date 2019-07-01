@@ -1,0 +1,7 @@
+log.txt
+*.log
+*.pyc
+*.csv
+*.pmf
+*.pmf.dsc
+*.pmf.idx

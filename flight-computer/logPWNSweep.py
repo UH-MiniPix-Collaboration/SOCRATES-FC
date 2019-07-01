@@ -1,13 +1,12 @@
 import serial
 import time
-import datetime
 import os
 import mysql.connector as mariadb
 import array
 import struct as struct
 import logging
 import csv
-
+from datetime import datetime
 from struct import *
 from serialconnections.serialconnections import packetHandler
 
@@ -24,14 +23,18 @@ PWM_SWEEP_BYTE2 = b'\x52'
 PWM_CMD = PWM_SWEEP_BYTE1 + PWM_SWEEP_BYTE2
 
 previousSweepTime = None
+time_fmt = '%Y-%m-%d %H:%M:%S'
 
 
 def checkPWMTime(arduino_serial_conn):
     global previousSweepTime
-    logger.info("Checking PWM time.")
-    logger.info(previousSweepTime)
-    if previousSweepTime is None or (datetime.datetime.now().second - previousSweepTime.second) >= 30:
-        previousSweepTime = datetime.datetime.now()
+    logger.info("Checking PWM time.")    
+    currentTime = datetime.strptime(datetime.now().strftime(time_fmt), time_fmt)
+    currentTime_ts = time.mktime(currentTime.timetuple())
+    if previousSweepTime is not None:
+        print(int(currentTime_ts - previousSweepTime))
+    if previousSweepTime is None or int(currentTime_ts - previousSweepTime) >= 30:
+        previousSweepTime = currentTime_ts
         performSweep(arduino_serial_conn)
 
 
@@ -67,7 +70,7 @@ solar12 = [12,12,12]
 """
 #Stores the voltage values receieved from the arduino into csv files with the name as the timestamp
 def storeInCSVFiles(voltages, solarCellNumber):
-    UTCTimeString =  solarCellNumber + str(datetime.datetime.now())
+    UTCTimeString =  str(solarCellNumber) + str(datetime.now())
     print(UTCTimeString)
     
     UTCTimeString = UTCTimeString+".csv"
@@ -79,6 +82,7 @@ def storeInCSVFiles(voltages, solarCellNumber):
         for i in range(0, len(voltages)): #stores all of the voltages in a csv file
             data_writer.writerow([voltages[i]])
 
+"""            
 storeInCSVFiles(solar1, "solarOne-")
 storeInCSVFiles(solar2, "solarTwo-")
 storeInCSVFiles(solar3, "solarThree-")
@@ -91,3 +95,4 @@ storeInCSVFiles(solar9, "solarNine-")
 storeInCSVFiles(solar10, "solarTen-")
 storeInCSVFiles(solar11, "solarEleven-")
 storeInCSVFiles(solar12, "solarTwelve-")
+"""

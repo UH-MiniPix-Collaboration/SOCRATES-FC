@@ -1,21 +1,21 @@
-################# LOG OPENED (12:42:07.704) ###################### 
-(12:42:07.704) [core]: Loading hw libraries (1)...
-(12:42:07.707) [core]: Added hw library minipix.so
-(12:42:07.741) [core]: Initializing hwlib minipix.so (1 devices)...
-(12:42:07.761) [core]: MiniPIX H06-W0239: No configuration for device MiniPIX-H06-W0239. Default will be used.
-(12:42:07.764) [core]: Stack Trace:
-1   0x733b7468 ./pxcore.so(+0x30468) [0x733b7468]
-2   0x733b6fe8 ./pxcore.so(+0x2ffe8) [0x733b6fe8]
-3   0x733c28c8 ./pxcore.so(+0x3b8c8) [0x733c28c8]
-4   0x733da75c ./pxcore.so(+0x5375c) [0x733da75c]
-5   0x733d0ba0 ./pxcore.so(+0x49ba0) [0x733d0ba0]
-6   0x733e1c2c ./pxcore.so(+0x5ac2c) [0x733e1c2c]
-7   0x733e176c ./pxcore.so(+0x5a76c) [0x733e176c]
-8   0x733e12d4 ./pxcore.so(+0x5a2d4) [0x733e12d4]
-9   0x7341a4b4 ./pxcore.so(+0x934b4) [0x7341a4b4]
-10  0x7341be68 pxInitialize + 44
-11  0x769fc850 PixetLoader::initPixet() + 100
-12  0x769fc214 /home/pi/SOCRATES-FC/flight-computer/pypixet.so(+0x2f214) [0x769fc214]
+################# LOG OPENED (15:31:22.637) ###################### 
+(15:31:22.638) [core]: Loading hw libraries (1)...
+(15:31:22.640) [core]: Added hw library minipix.so
+(15:31:22.674) [core]: Initializing hwlib minipix.so (1 devices)...
+(15:31:22.692) [core]: MiniPIX H06-W0239: No configuration for device MiniPIX-H06-W0239. Default will be used.
+(15:31:22.696) [core]: Stack Trace:
+1   0x733b6468 ./pxcore.so(+0x30468) [0x733b6468]
+2   0x733b5fe8 ./pxcore.so(+0x2ffe8) [0x733b5fe8]
+3   0x733c18c8 ./pxcore.so(+0x3b8c8) [0x733c18c8]
+4   0x733d975c ./pxcore.so(+0x5375c) [0x733d975c]
+5   0x733cfba0 ./pxcore.so(+0x49ba0) [0x733cfba0]
+6   0x733e0c2c ./pxcore.so(+0x5ac2c) [0x733e0c2c]
+7   0x733e076c ./pxcore.so(+0x5a76c) [0x733e076c]
+8   0x733e02d4 ./pxcore.so(+0x5a2d4) [0x733e02d4]
+9   0x734194b4 ./pxcore.so(+0x934b4) [0x734194b4]
+10  0x7341ae68 pxInitialize + 44
+11  0x769fb850 PixetLoader::initPixet() + 100
+12  0x769fb214 /home/pi/SOCRATES-FC/flight-computer/pypixet.so(+0x2f214) [0x769fb214]
 
 
-(12:42:08.062) [core]: Loading plugins (0)...
+(15:31:22.990) [core]: Loading plugins (0)...
