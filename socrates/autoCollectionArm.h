@@ -46,10 +46,8 @@ void checkActuator(boolean current, boolean old) {
 void spinStepperMotor() {
   if (stepper.currentPosition() % 32000 == 0)
     Serial.println(stepper.currentPosition());
-  stepper.moveTo(stepper.currentPosition() + 1600);
+  stepper.moveTo(stepper.currentPosition() + 100000000000000000); // was 1600
 
-  //stepper.setSpeed(500);
-  // ^ may be needed - experiment
 }
 
 void stopStepperMotor() {
