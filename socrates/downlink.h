@@ -1,7 +1,8 @@
 // Used this for reference: https://forum.arduino.cc/index.php?topic=45282.0
 
-#include "sampleThermistors.h"
+#include "ambientPressure.h"
 #include "issSensor.h"
+#include "sampleThermistors.h"
 
 #define NUM_DATA_INPUTS 40;  // Number of data inputs we have
 
@@ -17,6 +18,7 @@ struct datapacket
   float thermistors[14];
   float photodiodes[4];
 };
+
 
 // **********TODO**********
 // Sends pre-compiled data to the serial port
@@ -66,8 +68,8 @@ void buildPacket()
   // Read through each data input pin; add each data value to the struct
   datapacket packet;
   packet.packetNum = pNum;
-  packet.ambPressure = 6.2; //getAmbientPressure();
-  packet.issPressure = 111.0;//getISSPressure();
+  packet.ambPressure = getAmbientPressure();
+  packet.issPressure = getISSPressure();
   packet.issTemperature = getISSTemperature();
 
   // ** Call temperature multiplexers here **

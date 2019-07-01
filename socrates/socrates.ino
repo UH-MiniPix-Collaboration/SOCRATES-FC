@@ -42,6 +42,7 @@ void loop() {
   processCommands();
   if (manualCommand)
     autoCollectionArm(0);
+  //autoCollectionArm(0);
   //buildPacket();
   /*
   if (digitalRead(30) == LOW)

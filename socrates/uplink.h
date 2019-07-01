@@ -58,16 +58,18 @@ void processCommands()
       else if (command[0] == DOWNLINK_BYTE1 && command[1] == DOWNLINK_BYTE2)//(command[0] == 'D')//
       {
         buildPacket();
+        /*
         if (led)
           digitalWrite(52, LOW);
         else
           digitalWrite(52, HIGH);
         led = !led;
+        */
       }
       // Perform the PWM sweep
       else if (command[0] == PWM_BYTE1 && command[1] == PWM_BYTE2)//(command[0] == 'P')//
       {
-        Serial.println("Sweeping");
+        //Serial.println("Sweeping");
         if (led)
           digitalWrite(52, LOW);
         else

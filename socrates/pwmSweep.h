@@ -3,13 +3,15 @@
 // Pin used to output the PWM voltage sweep
 #define pwmOutput 8
 
-// Analog pins to read in mux values
+// Analog pins to read in current values
 #define currentIn1 A2
 
 
 // Sweeps one group of cells and prints to Pi. Ends each cell with "\n"
 void sweepCellGroup()
 {
+  Serial.print("begin_pwm,");
+  
   float cell1Currents[60];
   float cell2Currents[60];
   float cell3Currents[60];
@@ -17,7 +19,7 @@ void sweepCellGroup()
   while (var < 60)
   {
     analogWrite(pwmOutput, var);
-    delay(500);  // ** May need to adjust this value ** //
+    delay(100);  // ** May need to adjust this value ** //
 
     // Read one group of cells, save values to arrays.
     // Currently reading one cell. Add mux reading for group.
