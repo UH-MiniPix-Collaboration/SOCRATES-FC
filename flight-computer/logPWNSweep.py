@@ -48,15 +48,19 @@ def performSweep(arduino_serial_conn):
         return pwm_array
     """
 
-#Passing an array that holds voltage values
-#Voltage/current sweep will occur every 30 minutes. All other data will be stored every second onto the database
-def voltageSweep(voltages):
-    UTCTimeString = str("test" + ".csv")
-    f = open(UTCTimeString, "w+")
+    
+#Stores the voltage values receieved from the arduino into csv files with the name as the timestamp
+def storeInCSVFies(voltages):
+    UTCTimeString =  str((datetime.datetime.now()+ ".csv"))
+
     # Writes to the newly created csv file
     with open(UTCTimeString, mode='w+') as UTC_File:
         data_writer = csv.writer(UTC_File, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
         data_writer.writerow(['Voltage'])
-        print(voltages)
-        for i in range(0, len(voltages)): #stores all of the voltages a csv file
+
+        for i in range(0, len(voltages)): #stores all of the voltages in a csv file
             data_writer.writerow([voltages[i]])
+
+for i in range(0,12):
+    voltageSweep("solar" + str(i))
+
