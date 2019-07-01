@@ -64,7 +64,7 @@ def packetHandler(arduino_serial_connection):
                 packet = data.decode('utf-8')
             except Exception as e:
                 logger.warning(e)
-            eopIndex = packet.find('\n')
+            eopIndex = packet.find('\r')
             fixedData = remainingString + packet[:eopIndex]
             #logger.debug("fixedString: " + fixedData)
             if eopIndex is -1:
@@ -74,7 +74,7 @@ def packetHandler(arduino_serial_connection):
                 completePacket = remainingString + packet[:eopIndex]
                 logger.debug('Complete packet: ' + completePacket)
                 packetComplete = True
-                remainingString = ""
+                remainingString = remainingString[:remainingString.find('\r')]
                 remainingBytes = b''
                 return completePacket
         

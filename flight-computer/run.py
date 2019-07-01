@@ -7,6 +7,8 @@ from numpy import sum as npsum
 from picamera import PiCamera
 from time import sleep, strftime
 
+from logPWNSweep import checkPWMTime, voltageSweep
+
 from settings import i2CBUS
 from acquisition.minipixacquisition import MiniPIXAcquisition, take_acquisition
 from analysis.frameanalysis import Frame, Calibration
@@ -72,15 +74,24 @@ class RPIDosimeter:
         self.camera.capture("/home/pi/images/" + filename + ".jpg")
         sleep(2)
 
-    def main(self):
-        #self.capture_image()     
 
+    def get_device_temp(self):
+        pars = self.device.parameters() # get parameters object
+        par = pars.get("Temperature")  # temperature parameter in Minipix device
+        temp = par.getDouble()
+        return temp
+        
+        
+    def main(self):
         self.minipix.start()
         self.running = True
         
         while True:
             # If there's an acquisition available for analysis
             # Receive the downlink data from the Arduino
+
+            # Check if PWM sweep needs to be performed. Performs sweep if necessary
+            checkPWMTime(self.arduino_serial_connection)
             
             cmd = b'\x41'+b'\x42'
             numBytes = self.arduino_serial_connection.write(cmd)
@@ -107,10 +118,14 @@ class RPIDosimeter:
                 cluster_counts = i+1
 
             if packet is not None:
-                mp_temp = 50.0
-                mp_data = str(mp_temp)+','+str(dose)+','+str(cluster_counts)
-                packet = packet[:packet.find(',')] + ',' + mp_data + packet[packet.find(','):]
-                downlinkPacket(self.hasp_serial_connection, packet)
+                if packet.find('begin_pwm') is not -1:
+                    print(packet)
+                    voltageSweep(packet)
+                else:
+                    mp_temp = self.get_device_temp()
+                    mp_data = str(mp_temp)+','+str(dose)+','+str(cluster_counts)
+                    packet = packet[:packet.find(',')] + ',' + mp_data + packet[packet.find(','):]
+                    downlinkPacket(self.hasp_serial_connection, packet)
 
 
             
