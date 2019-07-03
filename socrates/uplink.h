@@ -13,11 +13,14 @@
 #define PWM_BYTE1                0x51
 #define PWM_BYTE2                0x52
 
+
 bool led = false;  // Used for testing. Remove later.
+
 
 // https://www.instructables.com/id/two-ways-to-reset-arduino-in-software/
 // Restarts the Arduino
 void(* resetFunc) (void) = 0; //declare reset function @ address 0
+
 
 // Handles all HASP commands sent from the RPi as well as the internal command of pwm sweeping
 void processCommands()
@@ -31,6 +34,7 @@ void processCommands()
     delay(20);  // Wait for second byte)
     command[1] = Serial.read();
     Serial.flush();
+    
     // HASP command was received
     if (command[1] != 0)
     {
@@ -75,7 +79,7 @@ void processCommands()
         else
           digitalWrite(52, HIGH);
         led = !led;
-        sweepCellGroup();  // Change to "sweepAllCells()" once all cells are attached.
+        sweepAllCells();
       }
     }
   }

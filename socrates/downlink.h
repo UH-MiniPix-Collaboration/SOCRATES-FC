@@ -29,17 +29,12 @@ void sendPacket(datapacket p)
   Serial.print(p.packetNum);
   Serial.print(",");
 
-  stepper.run();
-
   Serial.print(p.ambPressure);
   Serial.print(",");
-
-  stepper.run();
 
   Serial.print(p.issPressure);
   Serial.print(",");
 
-  stepper.run();
 
   Serial.print(p.issTemperature);
   Serial.print(",");
@@ -48,14 +43,12 @@ void sendPacket(datapacket p)
   {
     Serial.print(p.thermistors[i]);
     Serial.print(",");
-    stepper.run();
   }
 
   for (int i = 0; i < 4; i++)
   {
     Serial.print(p.photodiodes[i]);
     Serial.print(",");
-    stepper.run();
   }
 
   Serial.println();  // End the packet with \n
@@ -78,7 +71,6 @@ void buildPacket()
   for (int i = 0; i < 14; i++)
   {
     packet.thermistors[i] = 3.33; //thermValues[i];
-    stepper.run();
   }
 
   // ** Call photodiode multiplexer here **
@@ -86,7 +78,6 @@ void buildPacket()
   for (int i = 0; i < 4; i++)
   {
     packet.photodiodes[i] = 432.7; //photoValues[i];
-    stepper.run();
   }
 
   // Downlink the packet
