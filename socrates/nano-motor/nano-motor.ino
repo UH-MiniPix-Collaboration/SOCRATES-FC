@@ -42,7 +42,7 @@ void stopStepperMotor() {
 void setup() {
   stepper.setCurrentPosition(0);
   stepper.setMaxSpeed(4000);
-  stepper.setAcceleration(100);
+  stepper.setAcceleration(50); // was 100, set back?
 
   pinMode(shutdownSignal, INPUT);
 }
@@ -50,11 +50,13 @@ void setup() {
 void loop() {
   if (digitalRead(shutdownSignal) == HIGH && !shutdown)
   {
+    stepper.setAcceleration(-50); // was 100, set back?
     stopStepperMotor();
     shutdown = true;
   }
-  else if (!shutdown)
+  else if (!shutdown){
     spinStepperMotor();
+  }
   stepper.run();
   //delay(100);  // Do we need a delay here?
 }
