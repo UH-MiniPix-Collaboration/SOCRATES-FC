@@ -16,6 +16,8 @@
 // (DIR, STEP, M0, M1)
 AccelStepper stepper(AccelStepper::FULL4WIRE, 3, 4, 9, 8);
 bool shutdown = false;
+bool previousRunBool;
+bool runBool = false;
 
 // 1600 steps is a full revolution
 void spinStepperMotor() {
@@ -41,6 +43,15 @@ void stopStepperMotor() {
     Serial.println(finalPos);
   */
 }
+void checkAccel(bool current, bool old){
+     if (old != current) {
+        if (current == false) {
+          stepper.setAcceleration(-50);
+        }else if (current == true){
+          stepper.setAcceleration(50);
+        }
+     }
+}
 
 void setup() {
   stepper.setCurrentPosition(0);
@@ -53,15 +64,18 @@ void setup() {
 void loop() {
   if (digitalRead(shutdownSignal) == HIGH && !shutdown)
   {
-    stepper.setAcceleration(-50); // was 100, set back?
+    previousRunBool = runBool;
+    runBool = false;
+    checkAccel(runBool, previousRunBool);
     stepper.runToNewPosition(0);
     stepper.setMaxSpeed(0);
     shutdown = true;
   }
-  //else if (!shutdown){
-    //stepper.setAcceleration(50);
-    //spinStepperMotor();
-  //}
+  else if (!shutdown){
+    previousRunBool = runBool;
+    runBool = true;
+    checkAccel(runBool, previousRunBool);
+  }
   stepper.run();
   //delay(100);  // Do we need a delay here?
 
