@@ -55,6 +55,7 @@ void loop() {
   {
     stepper.setAcceleration(-50); // was 100, set back?
     stepper.runToNewPosition(0);
+    stepper.setMaxSpeed(0);
     shutdown = true;
   }
   //else if (!shutdown){
