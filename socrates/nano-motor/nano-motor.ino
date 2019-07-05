@@ -11,9 +11,10 @@
 #include "include/StepperDriver/BasicStepperDriver.cpp"
 
 
-#define shutdownSignal 7  // Listen for signal to shutdown motor
+#define shutdownSignal 11  // Listen for signal to shutdown motor
 
-AccelStepper stepper(AccelStepper::FULL4WIRE, 3, 4, 5, 6);
+// (DIR, STEP, M0, M1)
+AccelStepper stepper(AccelStepper::FULL4WIRE, 3, 4, 9, 8);
 bool shutdown = false;
 
 // 1600 steps is a full revolution
