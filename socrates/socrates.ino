@@ -28,6 +28,9 @@ void setup() {
   // PWM sweep pins
   pinMode(pwmOutput, OUTPUT);
 
+  pinMode(NANO_POWER_PIN, OUTPUT);
+  pinMode(NANO_SIGNAL_PIN, OUTPUT);
+
   // LED test pin
   pinMode(52, OUTPUT);
   pinMode(30, INPUT);
@@ -39,5 +42,5 @@ void loop() {
   processCommands();
   if (manualCommand)
     autoCollectionArm(0);
-  autoCollectionArm(ambPressure);
+  autoCollectionArm(0);
 }

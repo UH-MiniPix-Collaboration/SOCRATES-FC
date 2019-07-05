@@ -3,8 +3,8 @@
 
 
 #define ACTUATOR_SIGNAL_PIN 6
-#define NANO_POWER_PIN 10
-#define NANO_SIGNAL_PIN 11
+#define NANO_POWER_PIN 2
+#define NANO_SIGNAL_PIN 3
 
 Servo actuator;
 boolean previousExtendBool;

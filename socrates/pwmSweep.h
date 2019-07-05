@@ -1,7 +1,7 @@
 //https://www.youtube.com/watch?v=YCjiIpZaGsc
 
 // Pin used to output the PWM voltage sweep
-#define pwmOutput 8
+#define pwmOutput 7
 
 // Analog pins to read in current values
 #define currentIn1 A2

@@ -3,7 +3,7 @@
 #include "include/MS5803Library/SparkFun_MS5803_I2C.cpp"
 
 
-#define AMB_PRESSURE_PIN A0
+// Pins D20 and D21
 
 //  ADDRESS_HIGH = 0x76
 MS5803 sensor(ADDRESS_HIGH);
