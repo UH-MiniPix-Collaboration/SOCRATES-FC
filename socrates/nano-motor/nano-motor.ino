@@ -19,7 +19,8 @@ bool shutdown = false;
 
 // 1600 steps is a full revolution
 void spinStepperMotor() {
-  stepper.moveTo(stepper.currentPosition() + 1600);
+  //stepper.moveTo(stepper.currentPosition() + 1600);
+  stepper.run();
 }
 
 void stopStepperMotor() {
@@ -28,6 +29,7 @@ void stopStepperMotor() {
   long stepsToZero = 1600 - stepsInRev + 1600;
   long finalPos = currentPos + stepsToZero;
   stepper.moveTo(finalPos);
+  
 
   // Debug prints
   /*
@@ -52,12 +54,14 @@ void loop() {
   if (digitalRead(shutdownSignal) == HIGH && !shutdown)
   {
     stepper.setAcceleration(-50); // was 100, set back?
-    stopStepperMotor();
+    stepper.runToNewPosition(0);
     shutdown = true;
   }
-  else if (!shutdown){
-    spinStepperMotor();
-  }
+  //else if (!shutdown){
+    //stepper.setAcceleration(50);
+    //spinStepperMotor();
+  //}
   stepper.run();
   //delay(100);  // Do we need a delay here?
+
 }
