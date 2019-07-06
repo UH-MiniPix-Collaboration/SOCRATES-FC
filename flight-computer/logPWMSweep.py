@@ -1,7 +1,6 @@
 import serial
 import time
 import os
-import mysql.connector as mariadb
 import array
 import struct as struct
 import logging
@@ -51,45 +50,33 @@ def performSweep(arduino_serial_conn):
         return pwm_array
     """
 
+#Assuming the names of the folders are 1,2,3 etc.
+
+#Path to the solar cell folders
+savePath = "/home/pi/Desktop/flightComputer/"
+
+pwmString = "begin_pwm,4,1.00,3.65,5.654,6.45,begin_pwm,5,1.00,2.44,5.55,3.33,begin_pwm,6,2.55,3.44,4.33,2.44"
+
+def storeInCSVFiles(pwmString):
+    UTCTimeString = "/" + str(datetime.datetime.now()) + ".csv"
+    i=0
     
+    while i<len(pwmString):
+        if(pwmString[i] == 'b'):
+            i = i+10
+            temporarySavePath = savePath + pwmString[i]
+            i = i + 2
+        else:
+            break
+       
+        with open(temporarySavePath + UTCTimeString, mode='w+') as UTC_File:
+            data_writer = csv.writer(UTC_File, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)       
+            while i<len(pwmString):              
+                if pwmString[i] == 'b':
+                    break   
+                else:
+                    UTC_File.write(pwmString[i])      
+                    i = i + 1
 
-"""
-solar1 = [1,1,1]
-solar2 = [2,2,2]
-solar3 = [3,3,3]
-solar4 = [4,4,4]
-solar5 = [5,5,5]
-solar6 = [6,6,6]
-solar7 = [7,7,7]
-solar8 = [8,8,8]
-solar9 = [9,9,9]
-solar10 = [10,10,10]
-solar11 = [11,11,11]
-solar12 = [12,12,12]
-"""
-#Stores the voltage values receieved from the arduino into csv files with the name as the timestamp
-def storeInCSVFiles(voltages, solarCellNumber):
-    os.chdir("/home/pi/Desktop/flightComputer/" + solarCellNumber)
-    UTCTimeString = str(datetime.datetime.now())
-    print(UTCTimeString)
-    UTCTimeString = UTCTimeString+".csv"
+#storeInCSVFiles(pwmString)    
 
-    # Writes to the newly created csv file
-    with open(UTCTimeString, mode='w+') as UTC_File:
-        data_writer = csv.writer(UTC_File, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
-        for i in range(0, len(voltages)): #stores all of the voltages in a csv file
-            data_writer.writerow([voltages[i]])
-"""
-storeInCSVFiles(solar1, "solarCellOne")
-storeInCSVFiles(solar2, "solarCellTwo")
-storeInCSVFiles(solar3, "solarCellThree")
-storeInCSVFiles(solar4, "solarCellFour")
-storeInCSVFiles(solar5, "solarCellFive")
-storeInCSVFiles(solar6, "solarCellSix")
-storeInCSVFiles(solar7, "solarCellSeven")
-storeInCSVFiles(solar8, "solarCellEight")
-storeInCSVFiles(solar9, "solarCellNine")
-storeInCSVFiles(solar10, "solarCellTen")
-storeInCSVFiles(solar11, "solarCellEleven")
-storeInCSVFiles(solar12, "solarCellTwelve")
-"""
