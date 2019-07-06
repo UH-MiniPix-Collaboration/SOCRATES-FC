@@ -53,30 +53,29 @@ def performSweep(arduino_serial_conn):
 #Assuming the names of the folders are 1,2,3 etc.
 
 #Path to the solar cell folders
-savePath = "/home/pi/Desktop/flightComputer/"
+directoryPath = "/home/pi/Desktop/flightComputer/"
 
 pwmString = "begin_pwm,4,1.00,3.65,5.654,6.45,begin_pwm,5,1.00,2.44,5.55,3.33,begin_pwm,6,2.55,3.44,4.33,2.44"
 
 def storeInCSVFiles(pwmString):
-    UTCTimeString = "/" + str(datetime.datetime.now()) + ".csv"
-    i=0
+    UTCTime = "/" + str(datetime.datetime.now()) + ".csv"
     
+    i=0
     while i<len(pwmString):
-        if(pwmString[i] == 'b'):
-            i = i+10
-            temporarySavePath = savePath + pwmString[i]
-            i = i + 2
-        else:
-            break
+        i = i+10
+        temporaryPath = directoryPath + pwmString[i]
+        i = i + 2
        
-        with open(temporarySavePath + UTCTimeString, mode='w+') as UTC_File:
-            data_writer = csv.writer(UTC_File, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)       
-            while i<len(pwmString):              
-                if pwmString[i] == 'b':
-                    break   
-                else:
+        with open(temporaryPath + UTCTime, mode='w+') as UTC_File:
+            data_writer = csv.writer(UTC_File, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
+                       
+            while i<len(pwmString):
+                if pwmString[i] != 'b':
                     UTC_File.write(pwmString[i])      
                     i = i + 1
+                
+                else:
+                    break
 
 #storeInCSVFiles(pwmString)    
 
