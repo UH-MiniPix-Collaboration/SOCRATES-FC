@@ -17,11 +17,11 @@ int samples[NUMSAMPLES]; //mux0 8 thermistors
 
 
 // multiplexer variables
+// These pin numbers might be wrong; might need to change the numbers here
 #define pinOut_S0 47 // IC pin 11, digital select
 #define pinOut_S1 49 // IC pin 10, digital select
 #define pinOut_S2 51 // IC pin 9, digital select
 #define pinInMux0 A0 // mux0 pin 3, analog read
-//#define pinInMux1 A1 // mux1 pin 3, analog read
 float muxState[SENSORCOUNT] = {0}; // to hold temps
 //int sensorValue = 0;
 int muxSelect = 0; //used to increment through muxes

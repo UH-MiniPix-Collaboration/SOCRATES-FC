@@ -11,11 +11,11 @@ int pNum = 0;  // Keep track of packet number
 // Sample data packet
 struct datapacket
 {
-  int packetNum;
+  int packetNum; 
   float ambPressure;
   float issPressure;  // In Pa
   float issTemperature;  // In *C
-  float thermistors[14];
+  float thermistors[8];  // In *C
   float photodiodes[4];
 };
 
@@ -35,11 +35,10 @@ void sendPacket(datapacket p)
   Serial.print(p.issPressure);
   Serial.print(",");
 
-
   Serial.print(p.issTemperature);
   Serial.print(",");
 
-  for (int i = 0; i < 14; i++)
+  for (int i = 0; i < 7; i++)
   {
     Serial.print(p.thermistors[i]);
     Serial.print(",");
@@ -67,19 +66,18 @@ void buildPacket()
 
   // ** Call temperature multiplexers here **
   //Serial.println("Calling mux");  // Used for debugging; comment out for final build
-  //float* thermValues = readTempMux();
-  for (int i = 0; i < 14; i++)
+  float* thermValues = readTempMux();
+  for (int i = 0; i < 7; i++)
   {
-    packet.thermistors[i] = 3.33; //thermValues[i];
+    thermValues[i];//packet.thermistors[i] = 3.33; //
   }
 
-  // ** Call photodiode multiplexer here **
-  //float* photoValues = readPhotoMux();
-  for (int i = 0; i < 4; i++)
+  // ** Call photodiode pins here **
+  for (int i = 0; i < 3; i++)
   {
     packet.photodiodes[i] = 432.7; //photoValues[i];
   }
-
+  
   // Downlink the packet
   sendPacket(packet);
   pNum++;  // Increment packet number

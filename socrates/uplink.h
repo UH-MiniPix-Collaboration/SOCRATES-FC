@@ -31,10 +31,10 @@ void processCommands()
   {
     byte command[2] = {0};
     command[0] = Serial.read();
-    delay(20);  // Wait for second byte)
+    delay(20);  // Wait for second byte
     command[1] = Serial.read();
     Serial.flush();
-    
+
     // HASP command was received
     if (command[1] != 0)
     {
@@ -61,19 +61,16 @@ void processCommands()
       }
       else if (command[0] == DOWNLINK_BYTE1 && command[1] == DOWNLINK_BYTE2)//(command[0] == 'D')//
       {
-        buildPacket();
-        /*
         if (led)
           digitalWrite(52, LOW);
         else
           digitalWrite(52, HIGH);
         led = !led;
-        */
+        buildPacket();
       }
       // Perform the PWM sweep
       else if (command[0] == PWM_BYTE1 && command[1] == PWM_BYTE2)//(command[0] == 'P')//
       {
-        //Serial.println("Sweeping");
         if (led)
           digitalWrite(52, LOW);
         else
