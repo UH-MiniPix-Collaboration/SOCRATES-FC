@@ -9,7 +9,7 @@
 #define TEMPERATURENOMINAL 25 // temp. for nominal resistance
 #define BCOEFFICIENT 3950 // beta coefficient of thermistor (3000-4000)
 #define SERIESRESISTOR 10000 // "other" resistance "seen" by thermistor
-#define SENSORCOUNT 14
+#define SENSORCOUNT 8
 int index = 0; // muxState[] index
 float average; // average value of N samples
 float steinhart;
@@ -18,9 +18,9 @@ int samples[NUMSAMPLES]; //mux0 8 thermistors
 
 // multiplexer variables
 // These pin numbers might be wrong; might need to change the numbers here
-#define pinOut_S0 47 // IC pin 11, digital select
-#define pinOut_S1 49 // IC pin 10, digital select
-#define pinOut_S2 51 // IC pin 9, digital select
+#define pinOut_S0 48 // IC pin 11, digital select
+#define pinOut_S1 50 // IC pin 10, digital select
+#define pinOut_S2 52 // IC pin 9, digital select
 #define pinInMux0 A0 // mux0 pin 3, analog read
 float muxState[SENSORCOUNT] = {0}; // to hold temps
 //int sensorValue = 0;
@@ -70,7 +70,8 @@ void updateTemperatureMux()
       digitalWrite(pinOut_S1, HIGH && (i & B00000010));
       digitalWrite(pinOut_S2, HIGH && (i & B00000100));
       samples[j] = analogRead(pinInMux0);
-
+      //Serial.print(samples[j]);
+      //Serial.println(",");
       /*
         switch(muxSelect)
         {
@@ -110,11 +111,8 @@ float* readTempMux()
   //Serial.println("Reading Mux0"); //Debug serial monitor
   muxSelect = 0; //Select mux0
   updateTemperatureMux(); //Sample mux0 pins
-  //Serial.println("Reading Mux1"); //Debug serial monitor
-  //muxSelect = 1; //Select mux1
-  //updateTemperatureMux(); //Sample mux1 pins
-  return muxState;
-  /* //Debug serial monitor loop
+  /*
+    //Debug serial monitor loop
     for (int i = 0; i <= SENSORCOUNT; i++)
     {
     Serial.print(muxState[i]);
@@ -122,5 +120,8 @@ float* readTempMux()
     delay(10);
     }
     Serial.print("Looping\n");
-    delay(10);*/
+    delay(10);
+  */
+
+  return muxState;
 }

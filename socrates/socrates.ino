@@ -18,7 +18,13 @@ void setup() {
   // Set up actuator
   actuator.attach(ACTUATOR_SIGNAL_PIN);
   delay(10);
-  actuator.writeMicroseconds(1000);  // Ensure thaDt the actuator starts retracted
+  actuator.writeMicroseconds(1000);  // Ensure that the actuator starts retracted
+
+  // Control pins for the Nano
+  pinMode(NANO_POWER_PIN, OUTPUT);
+  //digitalWrite(NANO_POWER_PIN, LOW);
+  pinMode(NANO_SIGNAL_PIN, OUTPUT);
+  //digitalWrite(NANO_SIGNAL_PIN, LOW);
 
   // Thermistor multiplexer pins
   pinMode(pinOut_S0, OUTPUT);
@@ -28,20 +34,14 @@ void setup() {
   // PWM sweep pins
   pinMode(pwmOutput, OUTPUT);
 
-  // Control pins for the Nano
-  pinMode(NANO_POWER_PIN, OUTPUT);
-  pinMode(NANO_SIGNAL_PIN, OUTPUT);
-
   // LED test pin
-  pinMode(52, OUTPUT);
-  pinMode(30, INPUT);
-  pinMode(32, INPUT);
+  pinMode(29, OUTPUT);
 }
-float ambPressure = 1;
+float ambpressure = 2.0;
 
 void loop() {
   processCommands();
   if (manualCommand)
-    autoCollectionArm(0);
-  //autoCollectionArm(getAmbientPressure());
+    autoCollectionArm(0.1);
+  autoCollectionArm(ambpressure);  // getAmbientPressure()
 }

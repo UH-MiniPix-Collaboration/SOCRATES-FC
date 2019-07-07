@@ -11,6 +11,7 @@ boolean previousExtendBool;
 boolean extendBool = false;
 boolean motorActivated = false;
 boolean manualCommand = false;  // Control whether the system was activated manually
+bool led = false;  // Used for testing. Remove later.
 
 void checkActuator(boolean current, boolean old) {
   if (old != current) {
@@ -24,7 +25,6 @@ void checkActuator(boolean current, boolean old) {
 
 // 1600 steps is a full revolution
 void spinStepperMotor() {
-
   if (!motorActivated)
   {
     digitalWrite(NANO_POWER_PIN, HIGH);
@@ -34,7 +34,7 @@ void spinStepperMotor() {
 
 void stopStepperMotor() {
   digitalWrite(NANO_SIGNAL_PIN, HIGH);
-  delay(10000);  // Wait for motor to return to home position. We can look into protothreading this
+  delay(15000);  // Wait for motor to return to home position. We can look into protothreading this
   digitalWrite(NANO_POWER_PIN, LOW);
   digitalWrite(NANO_SIGNAL_PIN, LOW);
   motorActivated = false;
@@ -49,7 +49,7 @@ void autoCollectionArm(float pressureReading) {
     extendBool = true;
     checkActuator(extendBool, previousExtendBool);
     spinStepperMotor();
-  } else if (pressureReading >= 1) {
+  } else if (pressureReading >= 1.0) {
     if (extendBool)
       stopStepperMotor();
     previousExtendBool = extendBool;

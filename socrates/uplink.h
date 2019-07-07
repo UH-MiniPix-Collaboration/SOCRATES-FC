@@ -14,7 +14,7 @@
 #define PWM_BYTE2                0x52
 
 
-bool led = false;  // Used for testing. Remove later.
+//bool led = false;  // Used for testing. Remove later.
 
 
 // https://www.instructables.com/id/two-ways-to-reset-arduino-in-software/
@@ -29,7 +29,7 @@ void processCommands()
   int numIncomingBytes = Serial.available();
   if (numIncomingBytes > 0)
   {
-    byte command[2] = {0};
+    byte command[2];
     command[0] = Serial.read();
     delay(20);  // Wait for second byte
     command[1] = Serial.read();
@@ -42,42 +42,39 @@ void processCommands()
       if (command[0] == ASTROBIO_ON_BYTE1 && command[1] == ASTROBIO_ON_BYTE2)//(command[0] == 'A')//
       {
         manualCommand = true;
-        autoCollectionArm(0);  // Force the astrobio system to deploy
+        autoCollectionArm(0.1);  // Force the astrobio system to deploy
       }
       // Turn off astrobiology system
       else if (command[0] == ASTROBIO_OFF_BYTE1 && command[1] == ASTROBIO_OFF_BYTE2)//(command[0] == 'O')//
       {
         manualCommand = false;
-        autoCollectionArm(1);  // Force the astrobio system to retract
+        autoCollectionArm(2.0);  // Force the astrobio system to retract
       }
       // Force SOCRATES to reboot
-      else if (command[0] == REBOOT_BYTE1 && command[1] == REBOOT_BYTE2)
+      else if (command[0] == REBOOT_BYTE1 && command[1] == REBOOT_BYTE2)//(command[0] == 'R')//
       {
         // Force the astrobio system to close if we force a shut down of SOCRATES
         if (extendBool || manualCommand)
-          autoCollectionArm(1);
-        delay(5000);
+          autoCollectionArm(2.0);
+        delay(15000);
         resetFunc();
       }
       else if (command[0] == DOWNLINK_BYTE1 && command[1] == DOWNLINK_BYTE2)//(command[0] == 'D')//
       {
-        if (led)
-          digitalWrite(52, LOW);
-        else
-          digitalWrite(52, HIGH);
-        led = !led;
         buildPacket();
       }
+
       // Perform the PWM sweep
       else if (command[0] == PWM_BYTE1 && command[1] == PWM_BYTE2)//(command[0] == 'P')//
       {
         if (led)
-          digitalWrite(52, LOW);
+          digitalWrite(29, LOW);
         else
-          digitalWrite(52, HIGH);
+          digitalWrite(29, HIGH);
         led = !led;
         sweepAllCells();
       }
+
     }
   }
 }

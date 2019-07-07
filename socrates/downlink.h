@@ -4,14 +4,17 @@
 #include "issSensor.h"
 #include "sampleThermistors.h"
 
-#define NUM_DATA_INPUTS 40;  // Number of data inputs we have
 
-int pNum = 0;  // Keep track of packet number
+#define NUM_THERMISTORS 8
+#define NUM_PHOTODIODES 4
+
+
+long pNum = 1;  // Keep track of packet number
 
 // Sample data packet
 struct datapacket
 {
-  int packetNum; 
+  long packetNum;
   float ambPressure;
   float issPressure;  // In Pa
   float issTemperature;  // In *C
@@ -38,16 +41,17 @@ void sendPacket(datapacket p)
   Serial.print(p.issTemperature);
   Serial.print(",");
 
-  for (int i = 0; i < 7; i++)
+  for (int i = 0; i < NUM_THERMISTORS; i++)
   {
     Serial.print(p.thermistors[i]);
     Serial.print(",");
   }
 
-  for (int i = 0; i < 4; i++)
+  for (int i = 0; i < NUM_PHOTODIODES; i++)
   {
     Serial.print(p.photodiodes[i]);
-    Serial.print(",");
+    if (i != (NUM_PHOTODIODES - 1) )
+      Serial.print(",");
   }
 
   Serial.println();  // End the packet with \n
@@ -67,18 +71,18 @@ void buildPacket()
   // ** Call temperature multiplexers here **
   //Serial.println("Calling mux");  // Used for debugging; comment out for final build
   float* thermValues = readTempMux();
-  for (int i = 0; i < 7; i++)
+  for (int i = 0; i < NUM_THERMISTORS; i++)
   {
-    thermValues[i];//packet.thermistors[i] = 3.33; //
+    packet.thermistors[i] = thermValues[i]; //packet.thermistors[i] = 3.33; //
   }
 
   // ** Call photodiode pins here **
-  for (int i = 0; i < 3; i++)
+  for (int i = 0; i < NUM_PHOTODIODES; i++)
   {
     packet.photodiodes[i] = 432.7; //photoValues[i];
   }
-  
+
   // Downlink the packet
   sendPacket(packet);
-  pNum++;  // Increment packet number
+  pNum++;
 }
