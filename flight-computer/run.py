@@ -7,7 +7,7 @@ from numpy import sum as npsum
 from picamera import PiCamera
 from time import sleep, strftime
 
-from logPWNSweep import checkPWMTime, storeInCSVFiles
+from logPWMSweep import checkPWMTime, storeInCSVFiles
 
 from settings import i2CBUS
 from acquisition.minipixacquisition import MiniPIXAcquisition, take_acquisition
@@ -119,7 +119,7 @@ class RPIDosimeter:
 
             if packet is not None:
                 if packet.find('begin_pwm') is not -1:
-                    storeInCSVFiles(packet, packet.split(',')[1])  # Send packet to CSV
+                    storeInCSVFiles(packet)  # Send packet to CSV
                 else:
                     mp_temp = self.get_device_temp()
                     mp_data = str(mp_temp)+','+str(dose)+','+str(cluster_counts)

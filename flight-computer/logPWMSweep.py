@@ -42,40 +42,35 @@ def performSweep(arduino_serial_conn):
     
     # Send command to the Arduino to perform sweep
     arduino_serial_conn.write(PWM_CMD)
-    """
-    pwm_packet = packetHandler(arduino_serial_conn)
-    if pwm_packet is not None:
-        pwm_array = pwm_packet.split(',')
-        print(pwm_array)
-        return pwm_array
-    """
 
+    
 #Assuming the names of the folders are 1,2,3 etc.
 
 #Path to the solar cell folders
-directoryPath = "/home/pi/Desktop/flightComputer/"
+directoryPath = os.getcwd()
 
-pwmString = "begin_pwm,4,1.00,3.65,5.654,6.45,begin_pwm,5,1.00,2.44,5.55,3.33,begin_pwm,6,2.55,3.44,4.33,2.44"
+#pwmString = "begin_pwm,4,1.00,3.65,5.654,6.45,begin_pwm,5,1.00,2.44,5.55,3.33,begin_pwm,6,2.55,3.44,4.33,2.44"
 
 def storeInCSVFiles(pwmString):
-    UTCTime = "/" + str(datetime.datetime.now()) + ".csv"
-    
-    i=0
-    while i<len(pwmString):
-        i = i+10
-        temporaryPath = directoryPath + pwmString[i]
-        i = i + 2
-       
-        with open(temporaryPath + UTCTime, mode='w+') as UTC_File:
-            data_writer = csv.writer(UTC_File, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
-                       
-            while i<len(pwmString):
-                if pwmString[i] != 'b':
-                    UTC_File.write(pwmString[i])      
+    UTCTime = "/" + str(datetime.now()) + ".csv"
+    strings = pwmString.split('begin_pwm,')
+    strings.pop(0)  # Get rid of the residual index
+    for cellString in strings:
+        #cell_num = cellString.split(',')[0]
+        i=0
+        while i<len(cellString):
+            print(cellString)
+            print('Cell num: ' + cellString[i])
+            temporaryPath = directoryPath + '/' + cellString[i]
+            i = i + 2
+            
+            with open(temporaryPath + UTCTime, mode='w+') as UTC_File:
+                data_writer = csv.writer(UTC_File, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
+                #UTC_File.write(pwmString.split(cell_num+',')[1])
+                
+                while i<len(cellString):
+                    UTC_File.write(cellString[i])      
                     i = i + 1
                 
-                else:
-                    break
-
 #storeInCSVFiles(pwmString)    
 
