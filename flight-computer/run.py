@@ -1,3 +1,9 @@
+#!/usr/bin/python
+
+import os
+os.environ['LD_LIBRARY_PATH'] = os.getcwd()  # or whatever path you want
+
+
 import smbus
 import pypixet
 import logging

@@ -71,10 +71,13 @@ def packetHandler(arduino_serial_connection):
                 remainingString = remainingString + packet
                 remainingBytes = remainingBytes + data
             else:
-                completePacket = remainingString + packet[:eopIndex]
+                completePacket = remainingString + packet[:eopIndex+1]
                 logger.debug('Complete packet: ' + completePacket)
+                remainingString = packet[eopIndex:] #remainingString[remainingString.find('\r'):]
+                logger.debug('Remaining string: \'' + remainingString + '\'')
+                if remainingString.find('\r') is not -1:
+                    completePacket = completePacket + remainingString
                 packetComplete = True
-                remainingString = remainingString[:remainingString.find('\r')]
                 remainingBytes = b''
                 return completePacket
         
