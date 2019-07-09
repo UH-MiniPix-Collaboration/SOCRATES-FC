@@ -32,7 +32,7 @@ def checkPWMTime(arduino_serial_conn):
     currentTime_ts = time.mktime(currentTime.timetuple())
     if previousSweepTime is not None:
         print(int(currentTime_ts - previousSweepTime))
-    if previousSweepTime is None or int(currentTime_ts - previousSweepTime) >= 30:
+    if previousSweepTime is None or int(currentTime_ts - previousSweepTime) >= 60:
         previousSweepTime = currentTime_ts
         performSweep(arduino_serial_conn)
 

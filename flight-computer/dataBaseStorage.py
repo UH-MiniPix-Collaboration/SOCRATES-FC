@@ -8,11 +8,10 @@ import struct as struct
 import logging
 from struct import *
 
-"""
-def measure_temp():
+
+def measure_pi_temp():
     temp = os.popen("vcgencmd measure_temp").readline().strip('\n')
     return (temp.replace("temp=","").replace("\'C",""))
-"""
 
 #dataPacket = "1,1.23,3.45,4.44,6.77,4.44,3.55,7.77,4.33,6.77,4.55,4.33,6.88,3.44"
 

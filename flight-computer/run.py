@@ -20,7 +20,7 @@ from acquisition.minipixacquisition import MiniPIXAcquisition, take_acquisition
 from analysis.frameanalysis import Frame, Calibration
 from cmdprocessing.processcmd import HASPCommandHandler, SerialConnectionTest
 from serialconnections.serialconnections import connectToHASP, connectToArduino, packetHandler, downlinkPacket
-
+from dataBaseStorage import measure_pi_temp, storeDataInDatabase
 
 logging.basicConfig(level=logging.DEBUG,
                     format='[%(asctime)s] %(name)-8s %(levelname)-8s %(message)s',
@@ -130,6 +130,9 @@ class RPIDosimeter:
                     mp_temp = self.get_device_temp()
                     mp_data = str(mp_temp)+','+str(dose)+','+str(cluster_counts)
                     packet = packet[:packet.find(',')] + ',' + mp_data + packet[packet.find(','):]
+                    pi_temp = measure_pi_temp()
+                    packet = packet[:packet.find(',')] + ',' + pi_temp + packet[packet.find(','):]
+                    packet = packet + ',' + str(datetime.now())
                     downlinkPacket(self.hasp_serial_connection, packet)
 
 
