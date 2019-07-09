@@ -8,6 +8,7 @@ import smbus
 import pypixet
 import logging
 
+from datetime import datetime
 from numpy import array, nonzero
 from numpy import sum as npsum
 from picamera import PiCamera
@@ -127,12 +128,16 @@ class RPIDosimeter:
                 if packet.find('begin_pwm') is not -1:
                     storeInCSVFiles(packet)  # Send packet to CSV
                 else:
-                    mp_temp = self.get_device_temp()
-                    mp_data = str(mp_temp)+','+str(dose)+','+str(cluster_counts)
-                    packet = packet[:packet.find(',')] + ',' + mp_data + packet[packet.find(','):]
+                    mp2_temp = self.get_device_temp()
+                    mp2_data = str(mp2_temp)+','+str(dose)+','+str(cluster_counts)
+                    packet = packet[:packet.find(',')] + ',' + mp2_data + packet[packet.find(','):]
+                    mp1_temp = self.get_device_temp()
+                    mp1_data = str(mp1_temp)+','+str(dose)+','+str(cluster_counts)
+                    packet = packet[:packet.find(',')] + ',' + mp1_data + packet[packet.find(','):]
                     pi_temp = measure_pi_temp()
                     packet = packet[:packet.find(',')] + ',' + pi_temp + packet[packet.find(','):]
-                    packet = packet + ',' + str(datetime.now())
+                    packet = packet[:packet.find('\n')] + ',' + str(datetime.now())
+                    storeDataInDatabase(packet)
                     downlinkPacket(self.hasp_serial_connection, packet)
 
 
