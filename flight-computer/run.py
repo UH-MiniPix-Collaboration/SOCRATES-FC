@@ -14,14 +14,13 @@ from numpy import sum as npsum
 from picamera import PiCamera
 from time import sleep, strftime
 
-from datalogging.logPWMSweep import checkPWMTime, storeInCSVFiles
-
 from settings import i2CBUS
 from acquisition.minipixacquisition import MiniPIXAcquisition, take_acquisition
 from analysis.frameanalysis import Frame, Calibration
 from cmdprocessing.processcmd import HASPCommandHandler, SerialConnectionTest
 from serialconnections.serialconnections import connectToHASP, connectToArduino, packetHandler, downlinkPacket
 from datalogging.dataBaseStorage import measure_pi_temp, storeDataInDatabase
+from datalogging.logPWMSweep import checkPWMTime, storeInCSVFiles
 
 logging.basicConfig(level=logging.DEBUG,
                     format='[%(asctime)s] %(name)-8s %(levelname)-8s %(message)s',
@@ -36,6 +35,7 @@ console.setLevel(logging.INFO)
 console.setFormatter(formatter)
 logger.addHandler(console)                    
 
+time_fmt = '%Y-%m-%d-%H:%M:%S'
 
 class RPIDosimeter:
     # Initialize i2c devices, minipix, logging facilities etc.
@@ -136,7 +136,7 @@ class RPIDosimeter:
                     packet = packet[:packet.find(',')] + ',' + mp1_data + packet[packet.find(','):]
                     pi_temp = measure_pi_temp()
                     packet = packet[:packet.find(',')] + ',' + pi_temp + packet[packet.find(','):]
-                    packet = packet[:packet.find('\n')] + ',' + str(datetime.now())
+                    packet = packet[:packet.find('\r\r\n')] + ',' + str(datetime.now().strftime(time_fmt))
                     storeDataInDatabase(packet)
                     downlinkPacket(self.hasp_serial_connection, packet)
 

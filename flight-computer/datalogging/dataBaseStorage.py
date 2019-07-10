@@ -30,7 +30,7 @@ f.write(start_packet + "|" + RPI_temp + "|" + minipix1_temp + "|" + minipix2_tem
 
 def storeDataInDatabase(dataPacket):
     dataPacketArray = dataPacketToArray(dataPacket)
-    print (dataPacketArray)
+    #print (dataPacketArray)
     #Connects to the mysql database
     mariadb_connection = mariadb.connect(
         host = "localhost",
