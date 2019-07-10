@@ -18,8 +18,8 @@ struct datapacket
   float ambPressure;
   float issPressure;  // In Pa
   float issTemperature;  // In *C
-  float thermistors[8];  // In *C
-  float photodiodes[4];
+  float thermistors[NUM_THERMISTORS];  // In *C
+  float photodiodes[NUM_PHOTODIODES];
 };
 
 

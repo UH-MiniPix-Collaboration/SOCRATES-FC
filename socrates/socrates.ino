@@ -44,4 +44,8 @@ void loop() {
   if (manualCommand)
     autoCollectionArm(0.1);
   autoCollectionArm(ambpressure);  // getAmbientPressure()
+  //int pin = analogRead(A2)* 4.9;
+  //Serial.println(pin);
+  //sweepAllCells();
+  //delay(5000);
 }
