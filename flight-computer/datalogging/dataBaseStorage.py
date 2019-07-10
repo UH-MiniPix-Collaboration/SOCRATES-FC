@@ -3,6 +3,7 @@ import time
 import mysql.connector as mariadb
 import datetime
 import os
+import csv
 import array
 import struct as struct
 import logging
@@ -20,15 +21,13 @@ def dataPacketToArray(dataPacket):
     print(dataPacketArray)
     return dataPacketArray
 
-"""
-def storeDataInTxtFiles(start_packet, RPI_temp, minipix1_temp, minipix2_temp,ISS_temp, ISS_pressure, ambient_pressure, solar_cells, end_packet):
-UTCTimeString = str(datetime.datetime.now()+ ".txt")
-f=open(UTCTimeString,"w+")
-#Writes to the newly ceated txt file
-f.write(start_packet + "|" + RPI_temp + "|" + minipix1_temp + "|" + minipix2_temp + "|" + ISS_temp + "|" + ISS_pressure + "|" + ambient_pressure + "|" + solar_cells + "|" + end_packet)
-"""
+def storeDataPacketsInCSVFile(dataPacket):
+    with open("backupFile.csv", mode='a+') as backupFile:
+        backupFile.write(dataPacket)
+        backupFile.write('\n')
 
 def storeDataInDatabase(dataPacket):
+    storeDataPacketsInCSVFile(dataPacket)
     dataPacketArray = dataPacketToArray(dataPacket)
     print (dataPacketArray)
     #Connects to the mysql database
