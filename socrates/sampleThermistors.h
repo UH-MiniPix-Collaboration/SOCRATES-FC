@@ -9,7 +9,7 @@
 #define TEMPERATURENOMINAL 25 // temp. for nominal resistance
 #define BCOEFFICIENT 3950 // beta coefficient of thermistor (3000-4000)
 #define SERIESRESISTOR 10000 // "other" resistance "seen" by thermistor
-#define SENSORCOUNT 8
+#define SENSORCOUNT 7
 int index = 0; // muxState[] index
 float average; // average value of N samples
 float steinhart;
@@ -18,9 +18,9 @@ int samples[NUMSAMPLES]; //mux0 8 thermistors
 
 // multiplexer variables
 // These pin numbers might be wrong; might need to change the numbers here
-#define pinOut_S0 48 // IC pin 11, digital select
-#define pinOut_S1 50 // IC pin 10, digital select
-#define pinOut_S2 52 // IC pin 9, digital select
+#define pinOut_S0 47 // IC pin 11, digital select
+#define pinOut_S1 49 // IC pin 10, digital select
+#define pinOut_S2 51 // IC pin 9, digital select
 #define pinInMux0 A0 // mux0 pin 3, analog read
 float muxState[SENSORCOUNT] = {0}; // to hold temps
 //int sensorValue = 0;
@@ -60,7 +60,7 @@ void convertToTemp()
 
 void updateTemperatureMux()
 {
-  for (int i = 0; i < 8; i++) // mux input counter
+  for (int i = 0; i <= SENSORCOUNT; i++) // mux input counter
   {
     for (int j = 0; j < NUMSAMPLES; j++) // take N samples
     {
@@ -69,6 +69,7 @@ void updateTemperatureMux()
       digitalWrite(pinOut_S0, HIGH && (i & B00000001));
       digitalWrite(pinOut_S1, HIGH && (i & B00000010));
       digitalWrite(pinOut_S2, HIGH && (i & B00000100));
+      delay(10);
       samples[j] = analogRead(pinInMux0);
       //Serial.print(samples[j]);
       //Serial.println(",");
@@ -93,16 +94,16 @@ void updateTemperatureMux()
         samples[j] = analogRead(pinInMux1); //store mux1 sample values
         }*/
 
-      delay(1);
+      delay(10);
     }
     average = 0; //clear average accumulator
-    for (int j = 0; j < NUMSAMPLES; j++)
+    for (int k = 0; k < NUMSAMPLES; k++)
     {
-      average += samples[j]; // accumulate samples
+      average += samples[k]; // accumulate samples
     }
     average /= NUMSAMPLES; //final sample average
     convertToTemp(); //conversion to temperature value
-    delay(1);
+    delay(10);
   }
 }
 
@@ -113,7 +114,7 @@ float* readTempMux()
   updateTemperatureMux(); //Sample mux0 pins
   /*
     //Debug serial monitor loop
-    for (int i = 0; i <= SENSORCOUNT; i++)
+    for (int i = 0; i < SENSORCOUNT; i++)
     {
     Serial.print(muxState[i]);
     Serial.print(" ");

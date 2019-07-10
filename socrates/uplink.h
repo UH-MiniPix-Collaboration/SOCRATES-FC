@@ -13,9 +13,7 @@
 #define PWM_BYTE1                0x51
 #define PWM_BYTE2                0x52
 
-
-//bool led = false;  // Used for testing. Remove later.
-
+bool led = false;
 
 // https://www.instructables.com/id/two-ways-to-reset-arduino-in-software/
 // Restarts the Arduino
@@ -63,18 +61,18 @@ void processCommands()
       {
         buildPacket();
       }
-
       // Perform the PWM sweep
       else if (command[0] == PWM_BYTE1 && command[1] == PWM_BYTE2)//(command[0] == 'P')//
       {
+        /*
         if (led)
           digitalWrite(29, LOW);
         else
           digitalWrite(29, HIGH);
         led = !led;
+        */
         sweepAllCells();
       }
-
     }
   }
 }

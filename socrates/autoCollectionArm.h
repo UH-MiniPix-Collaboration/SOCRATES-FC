@@ -11,7 +11,6 @@ boolean previousExtendBool;
 boolean extendBool = false;
 boolean motorActivated = false;
 boolean manualCommand = false;  // Control whether the system was activated manually
-bool led = false;  // Used for testing. Remove later.
 
 void checkActuator(boolean current, boolean old) {
   if (old != current) {
