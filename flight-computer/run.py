@@ -14,14 +14,14 @@ from numpy import sum as npsum
 from picamera import PiCamera
 from time import sleep, strftime
 
-from logPWMSweep import checkPWMTime, storeInCSVFiles
+from datalogging.logPWMSweep import checkPWMTime, storeInCSVFiles
 
 from settings import i2CBUS
 from acquisition.minipixacquisition import MiniPIXAcquisition, take_acquisition
 from analysis.frameanalysis import Frame, Calibration
 from cmdprocessing.processcmd import HASPCommandHandler, SerialConnectionTest
 from serialconnections.serialconnections import connectToHASP, connectToArduino, packetHandler, downlinkPacket
-from dataBaseStorage import measure_pi_temp, storeDataInDatabase
+from datalogging.dataBaseStorage import measure_pi_temp, storeDataInDatabase
 
 logging.basicConfig(level=logging.DEBUG,
                     format='[%(asctime)s] %(name)-8s %(levelname)-8s %(message)s',
