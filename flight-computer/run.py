@@ -1,8 +1,7 @@
 #!/usr/bin/python
 
 import os
-os.environ['LD_LIBRARY_PATH'] = os.getcwd()  # or whatever path you want
-
+os.environ['LD_LIBRARY_PATH'] = os.getcwd()
 
 import smbus
 import pypixet
@@ -30,6 +29,7 @@ logging.basicConfig(level=logging.DEBUG,
 logger = logging.getLogger('fli_comp')
 logger.setLevel(logging.DEBUG)
 formatter = logging.Formatter('[%(asctime)s] %(name)-8s: %(levelname)-8s %(message)s')
+sle = logging.StreamHandler()
 console = logging.StreamHandler()
 console.setLevel(logging.INFO)
 console.setFormatter(formatter)
@@ -108,37 +108,42 @@ class RPIDosimeter:
                 logger.warning('Failed to send downlink command to SOCRATES.')
             packet = packetHandler(self.arduino_serial_connection)
             
-            acq, count = self.minipix.get_last_acquisition(block=True)
-            arr = array(acq) 
-            energy = self.calibration.apply_calibration(arr)
+            mp_acq, mp_count = self.minipix.get_last_acquisition(block=True)
+            mp_arr = array(mp_acq) 
+            mp_energy = self.calibration.apply_calibration(mp_arr)
                 
-            frame = Frame(array(energy))
-            if count > 0:
-                frame.do_clustering()
-            total_energy = npsum(energy[nonzero(energy)]) 
-            dose = (total_energy/96081.3)/self.minipix.shutter_time
-            logger.info("Pixel Count: {} Clusters: {} Total Energy: {:.5f} DoseRate: {}".format(count, frame.cluster_count, total_energy, dose*60))
+            mp_frame = Frame(array(mp_energy))
+            if mp_count > 0:
+                mp_frame.do_clustering()
+            mp_total_energy = npsum(mp_energy[nonzero(mp_energy)]) 
+            mp_dose = (mp_total_energy/96081.3)/self.minipix.shutter_time
+            logger.info("MP Pixel Count: {} MP Clusters: {} MP Total Energy: {:.5f} MP DoseRate: {}".format(mp_count, mp_frame.cluster_count, mp_total_energy, mp_dose*60))
 
-            cluster_counts = 0
-            for i, cluster in enumerate(frame.clusters):
-                logger.info("\tCluster: {} Density: {:.2f} energy: {:.5f}".format(i, cluster.density, cluster.energy))
-                cluster_counts = i+1
+            mp_cluster_counts = 0
+            for i, mp_cluster in enumerate(mp_frame.clusters):
+                logger.info("\tCluster: {} Density: {:.2f} Energy: {:.5f}".format(i, mp_cluster.density, mp_cluster.energy))
+                mp_cluster_counts = i+1
 
             if packet is not None:
                 if packet.find('begin_pwm') is not -1:
-                    storeInCSVFiles(packet)  # Send packet to CSV
+                    storeInCSVFiles(packet)  # Send IV packet to CSV
                 else:
-                    mp2_temp = self.get_device_temp()
-                    mp2_data = str(mp2_temp)+','+str(dose)+','+str(cluster_counts)
-                    packet = packet[:packet.find(',')] + ',' + mp2_data + packet[packet.find(','):]
-                    mp1_temp = self.get_device_temp()
-                    mp1_data = str(mp1_temp)+','+str(dose)+','+str(cluster_counts)
-                    packet = packet[:packet.find(',')] + ',' + mp1_data + packet[packet.find(','):]
-                    pi_temp = measure_pi_temp()
-                    packet = packet[:packet.find(',')] + ',' + pi_temp + packet[packet.find(','):]
-                    packet = packet[:packet.find('\r\r\n')] + ',' + str(datetime.now().strftime(time_fmt))
-                    storeDataInDatabase(packet)
-                    downlinkPacket(self.hasp_serial_connection, packet)
+                    # Handle case when there are multiple packets grouped together
+                    packet_arr = packet.split('\n')
+                    packet_arr.pop(-1)
+                    logger.debug('packet_arr: ' + str(packet_arr))
+                    for i, packet_from_array in enumerate(packet_arr):
+                        if i > 0:
+                            mp_dose = 0
+                            mp_cluster_counts = 0 
+                        mp2_data = str(self.get_device_temp())+','+str(mp_dose)+','+str(mp_cluster_counts)
+                        packet_from_array = packet_from_array[:packet_from_array.find(',')] + ',' + mp2_data + packet_from_array[packet_from_array.find(','):]
+                        mp1_data = str(self.get_device_temp())+','+str(mp_dose)+','+str(mp_cluster_counts)
+                        packet_from_array = packet_from_array[:packet_from_array.find(',')] + ',' + mp1_data + packet_from_array[packet_from_array.find(','):]
+                        packet_from_array = packet_from_array[:packet_from_array.find(',')] + ',' + measure_pi_temp() + packet_from_array[packet_from_array.find(','):]
+                        packet_from_array = packet_from_array[:packet_from_array.find('\r')] + ',' + str(datetime.now().strftime(time_fmt))
+                        storeDataInDatabase(packet_from_array)
+                        downlinkPacket(self.hasp_serial_connection, packet_from_array + '\n')
 
 
             

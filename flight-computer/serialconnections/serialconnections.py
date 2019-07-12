@@ -9,7 +9,10 @@ console = logging.StreamHandler()
 console.setLevel(logging.INFO)
 console.setFormatter(formatter)
 logger.addHandler(console)
-                    
+
+remainingString = ''
+remainingBytes = ''
+
 # Open connection with a specified port, return serial object
 def connectPort(portName):
     ser = None
@@ -51,8 +54,9 @@ def connectToArduino():
     return connectPort(acmPortName)
                                                                             
 def packetHandler(arduino_serial_connection):
-    remainingString = ""
-    remainingBytes = ''
+    global remainingString
+    global remainingBytes
+
     packetComplete = False
     if arduino_serial_connection.in_waiting > 0:
         while not packetComplete:
@@ -64,7 +68,7 @@ def packetHandler(arduino_serial_connection):
                 packet = data.decode('utf-8')
             except Exception as e:
                 logger.warning(e)
-            eopIndex = packet.find('\r')
+            eopIndex = packet.find('\n')
             fixedData = remainingString + packet[:eopIndex]
             #logger.debug("fixedString: " + fixedData)
             if eopIndex is -1:
@@ -72,15 +76,16 @@ def packetHandler(arduino_serial_connection):
                 remainingBytes = remainingBytes + data
             else:
                 completePacket = remainingString + packet[:eopIndex+1]
-                logger.debug('Complete packet: ' + completePacket)
-                remainingString = packet[eopIndex:] #remainingString[remainingString.find('\r'):]
+                remainingString = packet[eopIndex+1:] #remainingString[remainingString.find('\r'):]
                 logger.debug('Remaining string: \'' + remainingString + '\'')
-                if remainingString.find('\r') is not -1:
+                if remainingString.find('\n') is not -1:
                     completePacket = completePacket + remainingString
+                    remainingString = ''
+                logger.debug('Complete packet: ' + completePacket)
                 packetComplete = True
                 remainingBytes = b''
                 return completePacket
         
 def downlinkPacket(hasp_serial_connection, dataPacket):
     numBytesWritten = hasp_serial_connection.write(bytes(dataPacket))
-    logger.info('Sent ['+str(numBytesWritten)+'] bytes to HASP: '+str(dataPacket))
+    logger.info('Sent ['+str(numBytesWritten)+'] bytes to HASP: '+str(dataPacket.rstrip()))

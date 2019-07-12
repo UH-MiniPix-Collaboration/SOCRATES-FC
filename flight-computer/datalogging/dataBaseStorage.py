@@ -9,6 +9,16 @@ import struct as struct
 import logging
 from struct import *
 
+
+# Logger setup
+logger = logging.getLogger('dat_stor')
+formatter = logging.Formatter('[%(asctime)s] %(name)-8s: %(levelname)-8s %(message)s')
+console = logging.StreamHandler()
+console.setLevel(logging.INFO)
+console.setFormatter(formatter)
+logger.addHandler(console)
+
+
 #dataPacket = "1,1.23,3.45,4.44,6.77,4.44,3.55,7.77,4.33,6.77,4.55,4.33,6.88,3.44,1.23,1.23,1.23,1.23,1.23,1.23,1.23,1.23,1.23,1.23"
 
 def measure_pi_temp():
@@ -18,13 +28,13 @@ def measure_pi_temp():
 def dataPacketToArray(dataPacket):
     dataPacketArray = []
     dataPacketArray = dataPacket.split(",")
-    print(dataPacketArray)
     return dataPacketArray
 
 def storeDataPacketsInCSVFile(dataPacket):
     with open("backupFile.csv", mode='a+') as backupFile:
         backupFile.write(dataPacket)
         backupFile.write('\n')
+        logger.debug('Wrote \'' + str(dataPacket) + '\' to \'backupFile.csv\'')
 
 def storeDataInDatabase(dataPacket):
     storeDataPacketsInCSVFile(dataPacket)
@@ -45,3 +55,5 @@ def storeDataInDatabase(dataPacket):
     cursor.execute(sql, val)
     mariadb_connection.commit()
     mariadb_connection.close()
+    
+    logger.debug('Wrote \'' + str(dataPacket) + '\' to mariadb')
