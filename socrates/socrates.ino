@@ -4,6 +4,7 @@
 #define baudRate 4800
 
 
+
 void setup() {
   Serial.begin(baudRate);
 
@@ -32,10 +33,14 @@ void setup() {
   pinMode(pinOut_S2, OUTPUT);
 
   // PWM sweep pins
-  pinMode(pwmOutput, OUTPUT);
+  //pinMode(pwmOutput, OUTPUT);
+  pinMode(digiPotPower, OUTPUT);
+  pinMode (CS, OUTPUT);
+  SPI.begin();
 
   // LED test pin
   pinMode(29, OUTPUT);
+  
 }
 float ambpressure = 2.0;
 

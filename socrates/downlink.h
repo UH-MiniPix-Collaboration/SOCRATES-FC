@@ -8,6 +8,7 @@
 #define NUM_THERMISTORS 8
 #define NUM_PHOTODIODES 4
 
+//#define PHOTODIODE_PINS {A7, A8, A9, A10}
 
 long pNum = 1;  // Keep track of packet number
 
@@ -77,10 +78,16 @@ void buildPacket()
   }
 
   // ** Call photodiode pins here **
+  packet.photodiodes[0] = analogRead(A7);
+  packet.photodiodes[1] = analogRead(A8);
+  packet.photodiodes[2] = analogRead(A9);
+  packet.photodiodes[3] = analogRead(A10);
+  /*
   for (int i = 0; i < NUM_PHOTODIODES; i++)
   {
-    packet.photodiodes[i] = 432.7; //photoValues[i];
+    packet.photodiodes[i] = analogRead(PHOTODIODE_PINS[i]); 
   }
+  */
 
   // Downlink the packet
   sendPacket(packet);

@@ -10,8 +10,8 @@
 #define REBOOT_BYTE2             0x32
 #define DOWNLINK_BYTE1           0x41
 #define DOWNLINK_BYTE2           0x42
-#define PWM_BYTE1                0x51
-#define PWM_BYTE2                0x52
+#define SWEEP_BYTE1              0x51
+#define SWEEP_BYTE2              0x52
 
 bool led = false;
 
@@ -61,16 +61,15 @@ void processCommands()
       {
         buildPacket();
       }
-      // Perform the PWM sweep
-      else if (command[0] == PWM_BYTE1 && command[1] == PWM_BYTE2)//(command[0] == 'P')//
+      // Perform the voltage sweep
+      else if (command[0] == SWEEP_BYTE1 && command[1] == SWEEP_BYTE2)//(command[0] == 'P')//
       {
-        /*
         if (led)
           digitalWrite(29, LOW);
         else
           digitalWrite(29, HIGH);
         led = !led;
-        */
+        
         sweepAllCells();
       }
     }
