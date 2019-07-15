@@ -44,7 +44,7 @@ long stepsToZero() {                             // was formally Reed's stopStep
     Serial.println(finalPos);
   */
 }
-void checkAccel(bool current, bool old){
+void checkAccel(boolean current, boolean old){
      if (old != current) {
         if (current == false) {
           stepper.setAcceleration(-50);
