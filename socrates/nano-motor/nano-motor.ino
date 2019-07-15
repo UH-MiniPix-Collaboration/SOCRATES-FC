@@ -73,11 +73,11 @@ void loop() {
     stepper.run();
   }
   else if (!shutdown){
-    //previousRunBool = runBool;
-    //runBool = true;
-    //checkAccel(runBool, previousRunBool);
-    spinStepperMotor();
-    //stepper.run();
+    previousRunBool = runBool;
+    runBool = true;
+    checkAccel(runBool, previousRunBool);
+    spinStepperMotor();                    // this line is only one new from when we worked in hotel. If error try removing this 1st
+    stepper.run();
   }
   
   
