@@ -67,8 +67,8 @@ void loop() {
     previousRunBool = runBool;
     runBool = false;
     checkAccel(runBool, previousRunBool);
-    stepper.runToNewPosition(0);
-    stepper.setMaxSpeed(0);
+    stepper.runToNewPosition(0);  // this call blocks, but should be fine. 
+    //stepper.setMaxSpeed(0);  // likely not needed
     shutdown = true;
   }
   else if (!shutdown){
@@ -76,7 +76,9 @@ void loop() {
     runBool = true;
     checkAccel(runBool, previousRunBool);
   }
+  
+  
   stepper.run();
-  //delay(100);  // Do we need a delay here?
+
 
 }
