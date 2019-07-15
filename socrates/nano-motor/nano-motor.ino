@@ -70,11 +70,13 @@ void loop() {
     checkAccel(runBool, previousRunBool);
     stepper.runToNewPosition(stepsToZero() + 1600);  // this call blocks, but should be fine. Allows 1 full rev to slow down. 
     shutdown = true;
+    stepper.run();
   }
   else if (!shutdown){
     previousRunBool = runBool;
     runBool = true;
     checkAccel(runBool, previousRunBool);
+    stepper.run();
   }
   
   
