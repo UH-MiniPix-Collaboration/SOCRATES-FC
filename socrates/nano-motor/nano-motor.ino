@@ -25,12 +25,13 @@ void spinStepperMotor() {
   stepper.run();
 }
 
-void stopStepperMotor() {
-  long currentPos = stepper.currentPosition();
+long stepsToZero() {                             // was formally Reed's stopStepperMotor function. 
+  long currentPos = stepper.currentPosition();   // to return it, uncomment 33 and 34 and remove 32, and make it a void function
   long stepsInRev = currentPos % 1600;
   long stepsToZero = 1600 - stepsInRev + 1600;
-  long finalPos = currentPos + stepsToZero;
-  stepper.moveTo(finalPos);
+  return stepsToZero;
+  //long finalPos = currentPos + stepsToZero;
+  //stepper.moveTo(finalPos);
   
 
   // Debug prints
@@ -55,7 +56,7 @@ void checkAccel(bool current, bool old){
 
 void setup() {
   stepper.setCurrentPosition(0);
-  stepper.setMaxSpeed(4000);
+  stepper.setMaxSpeed(4000);  // may be too fast for processor to handle. 
   stepper.setAcceleration(50); // was 100, set back?
 
   pinMode(shutdownSignal, INPUT);
@@ -67,7 +68,7 @@ void loop() {
     previousRunBool = runBool;
     runBool = false;
     checkAccel(runBool, previousRunBool);
-    stepper.runToNewPosition(0);  // this call blocks, but should be fine.
+    stepper.runToNewPosition(stepsToZero() + 1600);  // this call blocks, but should be fine. Allows 1 full rev to slow down. 
     shutdown = true;
   }
   else if (!shutdown){
