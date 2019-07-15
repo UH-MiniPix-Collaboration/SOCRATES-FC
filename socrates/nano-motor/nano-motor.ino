@@ -31,7 +31,7 @@ long stepsToZero() {                             // was formally Reed's stopStep
   long stepsToZero = 1600 - stepsInRev + 1600;
   return stepsToZero;
   //long finalPos = currentPos + stepsToZero;
-  //stepper.moveTo(finalPos);
+  //stepper.moveTo(finalPos);                     // moveTo call may not work because target pos never set (doesnt work in call)
   
 
   // Debug prints
