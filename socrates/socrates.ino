@@ -4,7 +4,6 @@
 #define baudRate 4800
 
 
-
 void setup() {
   Serial.begin(baudRate);
 
@@ -15,6 +14,11 @@ void setup() {
                   Adafruit_BMP280::SAMPLING_X16,    /* Pressure oversampling */
                   Adafruit_BMP280::FILTER_X16,      /* Filtering. */
                   Adafruit_BMP280::STANDBY_MS_500); /* Standby time. */
+
+  // Ambient pressure sensor
+  Wire.begin();
+  ambSensor.reset();
+  ambSensor.begin();
 
   // Set up actuator
   actuator.attach(ACTUATOR_SIGNAL_PIN);
@@ -40,17 +44,17 @@ void setup() {
 
   // LED test pin
   pinMode(29, OUTPUT);
-  
+
+  // Discrete command ports
+  pinMode(DS_ASTROBIO_ON, INPUT);  
+  pinMode(DS_ASTROBIO_OFF, INPUT);
+  pinMode(DS_REBOOT_SOCRATES, INPUT);
 }
-float ambpressure = 2.0;
 
 void loop() {
   processCommands();
   if (manualCommand)
-    autoCollectionArm(0.1);
-  autoCollectionArm(ambpressure);  // getAmbientPressure()
-  //int pin = analogRead(A2)* 4.9;
-  //Serial.println(pin);
-  //sweepAllCells();
-  //delay(5000);
+    autoCollectionArm(20);
+  else
+    autoCollectionArm(getAmbientPressure());
 }

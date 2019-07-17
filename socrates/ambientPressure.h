@@ -9,7 +9,7 @@
 // Pins D20 and D21
 
 //  ADDRESS_HIGH = 0x76
-MS5803 sensor(ADDRESS_HIGH);
+MS5803 ambSensor(ADDRESS_HIGH);
 
 float getAmbientPressure()
 {
@@ -23,5 +23,5 @@ float getAmbientPressure()
   }
   pinMode(21, INPUT);
 
-  return sensor.getPressure(ADC_4096);
+  return ambSensor.getPressure(ADC_4096);
 }

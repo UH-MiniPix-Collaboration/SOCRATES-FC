@@ -19,6 +19,7 @@ void checkActuator(boolean current, boolean old) {
     } else {
       actuator.writeMicroseconds(1000);
     }
+    delay(5000);
   }
 }
 
@@ -43,12 +44,12 @@ void stopStepperMotor() {
 // to prevent rapid switching on-off of the astrobio system during transition
 // between ascent/descent and float.
 void autoCollectionArm(float pressureReading) {
-  if (pressureReading < 0.5) {
+  if (pressureReading < 25) {
     previousExtendBool = extendBool;
     extendBool = true;
     checkActuator(extendBool, previousExtendBool);
     spinStepperMotor();
-  } else if (pressureReading >= 1.0) {
+  } else if (pressureReading >= 30) {
     if (extendBool)
       stopStepperMotor();
     previousExtendBool = extendBool;

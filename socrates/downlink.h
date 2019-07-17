@@ -74,7 +74,7 @@ void buildPacket()
   float* thermValues = readTempMux();
   for (int i = 0; i < NUM_THERMISTORS; i++)
   {
-    packet.thermistors[i] = thermValues[i]; //packet.thermistors[i] = 3.33; //
+    packet.thermistors[i] = thermValues[i];
   }
 
   // ** Call photodiode pins here **
@@ -82,12 +82,6 @@ void buildPacket()
   packet.photodiodes[1] = analogRead(A8);
   packet.photodiodes[2] = analogRead(A9);
   packet.photodiodes[3] = analogRead(A10);
-  /*
-  for (int i = 0; i < NUM_PHOTODIODES; i++)
-  {
-    packet.photodiodes[i] = analogRead(PHOTODIODE_PINS[i]); 
-  }
-  */
 
   // Downlink the packet
   sendPacket(packet);
