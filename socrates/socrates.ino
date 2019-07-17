@@ -53,8 +53,18 @@ void setup() {
 
 void loop() {
   processCommands();
+<<<<<<< HEAD
   if (manualCommand)
     autoCollectionArm(20);
   else
     autoCollectionArm(getAmbientPressure());
+=======
+  //if (manualCommand)
+   // autoCollectionArm(0.1);
+  autoCollectionArm(ambpressure);  // getAmbientPressure()
+  //int pin = analogRead(A2)* 4.9;
+  //Serial.println(pin);
+  //sweepAllCells();
+  //delay(5000);
+>>>>>>> 3cb2e5dc9b17c196d598c4f400f9d8a405ffcf21
 }

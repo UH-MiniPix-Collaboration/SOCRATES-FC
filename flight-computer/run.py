@@ -107,7 +107,6 @@ class RPIDosimeter:
             else:
                 logger.warning('Failed to send downlink command to SOCRATES.')
             packet = packetHandler(self.arduino_serial_connection)
-            
             mp_acq, mp_count = self.minipix.get_last_acquisition(block=True)
             mp_arr = array(mp_acq) 
             mp_energy = self.calibration.apply_calibration(mp_arr)
