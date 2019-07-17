@@ -21,7 +21,7 @@ bool runBool = false;
 
 // 1600 steps is a full revolution
 void spinStepperMotor() {
-  stepper.moveTo(stepper.currentPosition() + 1600);
+  stepper.moveTo(stepper.currentPosition() + 1599);
   //stepper.run();
 }
 
