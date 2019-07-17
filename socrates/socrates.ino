@@ -46,8 +46,8 @@ float ambpressure = 2.0;
 
 void loop() {
   processCommands();
-  if (manualCommand)
-    autoCollectionArm(0.1);
+  //if (manualCommand)
+   // autoCollectionArm(0.1);
   autoCollectionArm(ambpressure);  // getAmbientPressure()
   //int pin = analogRead(A2)* 4.9;
   //Serial.println(pin);
