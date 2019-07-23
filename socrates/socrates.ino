@@ -44,27 +44,10 @@ void setup() {
 
   // LED test pin
   pinMode(29, OUTPUT);
-
-  // Discrete command ports
-  pinMode(DS_ASTROBIO_ON, INPUT);  
-  pinMode(DS_ASTROBIO_OFF, INPUT);
-  pinMode(DS_REBOOT_SOCRATES, INPUT);
 }
 
 void loop() {
   processCommands();
-<<<<<<< HEAD
-  if (manualCommand)
-    autoCollectionArm(20);
-  else
+  if (!manualCommand)
     autoCollectionArm(getAmbientPressure());
-=======
-  //if (manualCommand)
-   // autoCollectionArm(0.1);
-  autoCollectionArm(ambpressure);  // getAmbientPressure()
-  //int pin = analogRead(A2)* 4.9;
-  //Serial.println(pin);
-  //sweepAllCells();
-  //delay(5000);
->>>>>>> 3cb2e5dc9b17c196d598c4f400f9d8a405ffcf21
 }

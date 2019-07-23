@@ -16,23 +16,18 @@
 // (DIR, STEP, M0, M1)
 AccelStepper stepper(AccelStepper::FULL4WIRE, 3, 4, 9, 8);
 bool shutdown = false;
-bool previousRunBool;
-bool runBool = false;
 
 // 1600 steps is a full revolution
 void spinStepperMotor() {
-  stepper.moveTo(stepper.currentPosition() + 1599);
-  //stepper.run();
+  stepper.moveTo(stepper.currentPosition() + 1600);
 }
 
-long stepsToZero() {                             // was formally Reed's stopStepperMotor function. 
-  long currentPos = stepper.currentPosition();   // to return it, uncomment 33 and 34 and remove 32, and make it a void function
+void stopStepperMotor() {
+  long currentPos = stepper.currentPosition();
   long stepsInRev = currentPos % 1600;
   long stepsToZero = 1600 - stepsInRev + 1600;
-  return stepsToZero;
-  //long finalPos = currentPos + stepsToZero;
-  //stepper.moveTo(finalPos);                     // moveTo call may not work because target pos never set (doesnt work in call)
-  
+  long finalPos = currentPos + stepsToZero;
+  stepper.moveTo(finalPos);
 
   // Debug prints
   /*
@@ -44,20 +39,11 @@ long stepsToZero() {                             // was formally Reed's stopStep
     Serial.println(finalPos);
   */
 }
-void checkAccel(boolean current, boolean old){
-     if (old != current) {
-        if (current == false) {
-          stepper.setAcceleration(-50);
-        }else if (current == true){
-          stepper.setAcceleration(50);
-        }
-     }
-}
 
 void setup() {
   stepper.setCurrentPosition(0);
-  stepper.setMaxSpeed(4000);  // may be too fast for processor to handle. 
-  stepper.setAcceleration(50); // was 100, set back?
+  stepper.setMaxSpeed(4000);
+  stepper.setAcceleration(100);
 
   pinMode(shutdownSignal, INPUT);
 }
@@ -65,23 +51,11 @@ void setup() {
 void loop() {
   if (digitalRead(shutdownSignal) == HIGH && !shutdown)
   {
-    previousRunBool = runBool;
-    runBool = false;
-    checkAccel(runBool, previousRunBool);
-    stepper.runToNewPosition(stepsToZero() + 1600);  // this call blocks, but should be fine. Allows 1 full rev to slow down. 
+    stopStepperMotor();
     shutdown = true;
-    stepper.run();
   }
-  else if (!shutdown){
-    previousRunBool = runBool;
-    runBool = true;
-    checkAccel(runBool, previousRunBool);
-    spinStepperMotor();                    // this line is only one new from when we worked in hotel. If error try removing this 1st
-    stepper.run();
-  }
-  
-  
+  else if (!shutdown)
+    spinStepperMotor();
   stepper.run();
-
-
+  //delay(100);  // Do we need a delay here?
 }

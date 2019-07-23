@@ -24,7 +24,6 @@ struct datapacket
 };
 
 
-// **********TODO**********
 // Sends pre-compiled data to the serial port
 void sendPacket(datapacket p)
 {
@@ -59,7 +58,6 @@ void sendPacket(datapacket p)
   Serial.flush();
 }
 
-// **********TODO**********
 void buildPacket()
 {
   // Read through each data input pin; add each data value to the struct
@@ -69,7 +67,7 @@ void buildPacket()
   packet.issPressure = getISSPressure();
   packet.issTemperature = getISSTemperature();
 
-  // ** Call temperature multiplexers here **
+  // ** Call temperature multiplexer here **
   //Serial.println("Calling mux");  // Used for debugging; comment out for final build
   float* thermValues = readTempMux();
   for (int i = 0; i < NUM_THERMISTORS; i++)
