@@ -5,7 +5,24 @@
 
 import os
 import sys
+import logging
 from time import sleep
+
+
+logging.basicConfig(level=logging.DEBUG,
+                    format='[%(asctime)s] %(name)-8s %(levelname)-8s %(message)s',
+                    filename='monitor-fc-log.txt',
+                    filemode='w')
+
+logger = logging.getLogger('mon_srpt')
+logger.setLevel(logging.DEBUG)
+formatter = logging.Formatter('[%(asctime)s] %(name)-8s: %(levelname)-8s %(message)s')
+sle = logging.StreamHandler()
+console = logging.StreamHandler()
+console.setLevel(logging.INFO)
+console.setFormatter(formatter)
+logger.addHandler(console)
+
 
 dir = os.getcwd()
 pidfile = "/tmp/fc.pid"
@@ -13,12 +30,12 @@ pidfile = "/tmp/fc.pid"
 while True:
     sleep(0.1)
     if os.path.isfile(pidfile):
-        print "run.py is running"
+        logger.info("run.py is running")
     else:
-        print "run.py is not running, starting script"
+        logger.info("run.py is not running, starting script")
         try:
-            print('Starting run.py')
-            sleep(1)
+            logger.info('Starting run.py')
             os.system('python ' + dir + '/run.py &')
+            sleep(8)  # Allow time for run.py to boot
         except Exception as e:
-            print(e)
+            logger.warning(e)

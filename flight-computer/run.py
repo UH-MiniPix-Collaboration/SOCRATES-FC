@@ -67,6 +67,7 @@ class RPIDosimeter:
         if self.device.fullName() != "MiniPIX H06-W0239":
             print()
             logger.error("No minipix found exiting...")
+            os.unlink(pidfile)
             exit(0)
         self.device.loadConfigFromFile("calibration/MiniPIX-H06-W0239.xml")
 
