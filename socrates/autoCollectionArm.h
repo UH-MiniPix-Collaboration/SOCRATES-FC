@@ -19,7 +19,7 @@ void checkActuator(boolean current, boolean old) {
     } else {
       actuator.writeMicroseconds(1000);
     }
-    delay(5000);
+    delay(15000);  // Allow 15 seconds for the actuator to fully extend
   }
 }
 

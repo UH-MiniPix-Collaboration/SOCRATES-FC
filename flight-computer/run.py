@@ -3,6 +3,7 @@
 import os
 os.environ['LD_LIBRARY_PATH'] = os.getcwd()
 
+import sys
 import smbus
 import pypixet
 import logging
@@ -33,9 +34,21 @@ sle = logging.StreamHandler()
 console = logging.StreamHandler()
 console.setLevel(logging.INFO)
 console.setFormatter(formatter)
-logger.addHandler(console)                    
+logger.addHandler(console)
 
 time_fmt = '%Y-%m-%d-%H:%M:%S'
+
+# Setup PID file
+pid = str(os.getpid())
+pidfile = "/tmp/fc.pid"
+
+if os.path.isfile(pidfile):
+    print ("%s already exists, exiting" % pidfile)
+    sys.exit()
+pidf = open(pidfile, 'w')
+pidf.write(pid)
+pidf.close()
+
 
 class RPIDosimeter:
     # Initialize i2c devices, minipix, logging facilities etc.
@@ -87,19 +100,19 @@ class RPIDosimeter:
         par = pars.get("Temperature")  # temperature parameter in Minipix device
         temp = par.getDouble()
         return temp
-        
-        
+
+
     def main(self):
         self.minipix.start()
         self.running = True
-        
+
         while True:
             # If there's an acquisition available for analysis
             # Receive the downlink data from the Arduino
 
             # Check if PWM sweep needs to be performed. Performs sweep if necessary
             checkPWMTime(self.arduino_serial_connection)
-            
+
             cmd = b'\x41'+b'\x42'
             numBytes = self.arduino_serial_connection.write(cmd)
             if numBytes is 2:
@@ -108,13 +121,13 @@ class RPIDosimeter:
                 logger.warning('Failed to send downlink command to SOCRATES.')
             packet = packetHandler(self.arduino_serial_connection)
             mp_acq, mp_count = self.minipix.get_last_acquisition(block=True)
-            mp_arr = array(mp_acq) 
+            mp_arr = array(mp_acq)
             mp_energy = self.calibration.apply_calibration(mp_arr)
-                
+
             mp_frame = Frame(array(mp_energy))
             if mp_count > 0:
                 mp_frame.do_clustering()
-            mp_total_energy = npsum(mp_energy[nonzero(mp_energy)]) 
+            mp_total_energy = npsum(mp_energy[nonzero(mp_energy)])
             mp_dose = (mp_total_energy/96081.3)/self.minipix.shutter_time
             logger.info("MP Pixel Count: {} MP Clusters: {} MP Total Energy: {:.5f} MP DoseRate: {}".format(mp_count, mp_frame.cluster_count, mp_total_energy, mp_dose*60))
 
@@ -134,7 +147,7 @@ class RPIDosimeter:
                     for i, packet_from_array in enumerate(packet_arr):
                         if i > 0:
                             mp_dose = 0
-                            mp_cluster_counts = 0 
+                            mp_cluster_counts = 0
                         mp2_data = str(self.get_device_temp())+','+str(mp_dose)+','+str(mp_cluster_counts)
                         packet_from_array = packet_from_array[:packet_from_array.find(',')] + ',' + mp2_data + packet_from_array[packet_from_array.find(','):]
                         mp1_data = str(self.get_device_temp())+','+str(mp_dose)+','+str(mp_cluster_counts)
@@ -145,15 +158,15 @@ class RPIDosimeter:
                         downlinkPacket(self.hasp_serial_connection, packet_from_array + '\n')
 
 
-            
+
     def shutdown(self):
         print("Stopping acquisitions...")
         self.minipix.shutdown()
         self.minipix.join()
         print("Exiting main thread...")
         print("Stopping HASP command handler thread...")
-        self.cmd_handler.shutdown_flag.set()
-        self.cmd_handler.join()
+        #self.cmd_handler.shutdown_flag.set()
+        #self.cmd_handler.join()
         # Wait for minipix to shutdown properly
         sleep(2)
 
@@ -163,3 +176,5 @@ if __name__ == "__main__":
         app.main()
     except KeyboardInterrupt:
         app.shutdown()
+    finally:
+        os.unlink(pidfile)
