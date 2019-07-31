@@ -179,3 +179,4 @@ if __name__ == "__main__":
         app.shutdown()
     finally:
         os.unlink(pidfile)
+        logger.info('Unlinked PID file.')
