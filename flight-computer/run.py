@@ -177,6 +177,8 @@ if __name__ == "__main__":
         app.main()
     except KeyboardInterrupt:
         app.shutdown()
+    except Exception as e:
+        logger.error(e)
     finally:
         os.unlink(pidfile)
         logger.info('Unlinked PID file.')

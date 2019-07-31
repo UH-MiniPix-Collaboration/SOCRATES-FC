@@ -67,7 +67,8 @@ def packetHandler(arduino_serial_connection):
             bufSize = arduino_serial_connection.in_waiting
             data = arduino_serial_connection.read(bufSize)
             packet = ""
-            logger.debug('Received ['+str(bufSize)+'] bytes from ' + str(arduino_serial_connection.name) + ': \'' + str(data) + '\'')
+            if bufSize != 0:
+                logger.debug('Received ['+str(bufSize)+'] bytes from ' + str(arduino_serial_connection.name) + ': \'' + str(data) + '\'')
             try:
                 packet = data.decode('utf-8')
             except Exception as e:
