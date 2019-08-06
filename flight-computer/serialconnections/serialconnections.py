@@ -83,17 +83,18 @@ def packetHandler(arduino_serial_connection):
                 completePacket = remainingString + packet[:eopIndex+1]
                 remainingString = packet[eopIndex+1:] #remainingString[remainingString.find('\r'):]
                 logger.debug('Remaining string: \'' + remainingString + '\'')
-                if remainingString.find('\n') is not -1:
+                if remainingString.find('\n') is not -1 and completePacket.find('begin_pwm') is -1:
                     completePacket = completePacket + remainingString
                     remainingString = ''
                 logger.debug('Complete packet: ' + completePacket)
                 packetComplete = True
                 remainingBytes = b''
-                remainingCommas =  completePacket.count(',') % 15
-                while remainingCommas is not 0:
-                    completePacket = completePacket[:completePacket.find(',')]
-                    print(completePacket)
-                    remainingCommas =  completePacket.count(',') % 15
+                if completePacket.find('begin_pwm') is -1:
+                    remainingCommas = completePacket.count(',') % 15
+                    while remainingCommas is not 0:
+                        completePacket = completePacket[:completePacket.find(',')]
+                        #print(completePacket)
+                        remainingCommas =  completePacket.count(',') % 15
                 return completePacket
         
 def downlinkPacket(hasp_serial_connection, dataPacket):

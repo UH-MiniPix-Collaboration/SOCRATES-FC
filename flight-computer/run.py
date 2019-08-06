@@ -25,7 +25,7 @@ from datalogging.logPWMSweep import checkPWMTime, storeInCSVFiles
 logging.basicConfig(level=logging.DEBUG,
                     format='[%(asctime)s] %(name)-8s %(levelname)-8s %(message)s',
                     filename='log.txt',
-                    filemode='w')
+                    filemode='a')
 
 logger = logging.getLogger('fli_comp')
 logger.setLevel(logging.DEBUG)
@@ -155,8 +155,9 @@ class RPIDosimeter:
                         packet_from_array = packet_from_array[:packet_from_array.find(',')] + ',' + mp1_data + packet_from_array[packet_from_array.find(','):]
                         packet_from_array = packet_from_array[:packet_from_array.find(',')] + ',' + measure_pi_temp() + packet_from_array[packet_from_array.find(','):]
                         packet_from_array = packet_from_array[:packet_from_array.find('\r')] + ',' + str(datetime.now().strftime(time_fmt))
-                        storeDataInDatabase(packet_from_array)
-                        downlinkPacket(self.hasp_serial_connection, packet_from_array + '\n')
+                        if packet_from_array.count(',') == 23:  # final check to ensure that the packet is the proper size
+                            storeDataInDatabase(packet_from_array)
+                            downlinkPacket(self.hasp_serial_connection, packet_from_array + '\n')
 
 
 

@@ -12,7 +12,7 @@ from time import sleep
 logging.basicConfig(level=logging.DEBUG,
                     format='[%(asctime)s] %(name)-8s %(levelname)-8s %(message)s',
                     filename='monitor-fc-log.txt',
-                    filemode='w')
+                    filemode='a')
 
 logger = logging.getLogger('mon_srpt')
 logger.setLevel(logging.DEBUG)
@@ -28,7 +28,7 @@ dir = os.getcwd()
 pidfile = "/tmp/fc.pid"
 
 while True:
-    sleep(0.1)
+    sleep(0.2)
     if os.path.isfile(pidfile):
         logger.info("run.py is running")
     else:

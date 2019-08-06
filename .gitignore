@@ -1,6 +1,5 @@
 .gitignore~
-log.txt
-monitor-fx-log.txt
+*log.txt
 *.log
 *.pyc
 *.csv
