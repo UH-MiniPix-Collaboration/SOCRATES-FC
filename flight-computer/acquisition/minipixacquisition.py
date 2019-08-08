@@ -1,13 +1,26 @@
+import time
 from threading import Thread, Event
 from Queue import Queue
-from time import sleep
 from random import randint
+from datetime import datetime
 
 from numpy import nonzero
 
 DESIRED_DETECTOR_AREA_3_PERCENT = 1966  # 3% of the detector area in pixels
 DESIRED_DETECTOR_AREA_4_PERCENT = 2621
 DESIRED_DETECTOR_AREA_5_PERCENT = 3276
+
+time_fmt = '%Y-%m-%d_%H:%M:%S'
+prev_file_time = datetime.strptime(datetime.now().strftime(time_fmt), time_fmt)
+
+
+
+def set_file_time():
+    global prev_file_time        
+    current_time_ts = time.mktime(datetime.strptime(datetime.now().strftime(time_fmt), time_fmt).timetuple())
+    prev_file_time_ts = time.mktime(prev_file_time.timetuple())
+    if current_time_ts - prev_file_time_ts >= 28800:
+        prev_file_time = datetime.strptime(datetime.now().strftime(time_fmt), time_fmt)
 
 
 class MiniPIXAcquisition(Thread):
@@ -22,7 +35,7 @@ class MiniPIXAcquisition(Thread):
         :param minipix: MiniPIX object
         :param variable_frate: Capture with a variable frame rate if set to true
         :param shutter_time: Initial shutter time
-        :param detector_area: Detector area parameter used by variable frame rate algorithm
+         :param detector_area: Detector area parameter used by variable frame rate algorithm
         """
         Thread.__init__(self, **kwargs)
         self.minipix = minipix
@@ -36,17 +49,20 @@ class MiniPIXAcquisition(Thread):
         self.data = Queue()
         self.stop_acquisitions = Event()
         self.shutdown_flag = Event()
-
+        self.file_time = prev_file_time
+        
     def _take_aquisition(self):
         """
         :param shutter_time: Length of time to expose MiniPIX for
         :return:
         """
 
+        global prev_file_time
+        set_file_time()
         self.minipix.doSimpleAcquisition(1,
                                          self.shutter_time,
                                          self.pixet.PX_FTYPE_AUTODETECT,
-                                         'output.pmf')
+                                         'output' + '-' + str(prev_file_time) + '.pmf')
         frame = self.minipix.lastAcqFrameRefInc()
 
         return frame.data()
@@ -118,10 +134,12 @@ def take_acquisition(device, shutter_time, pixet):
     :return:
     """
 
+    global prev_file_time
+    set_file_time()
     device.doSimpleAcquisition(1,
                                      shutter_time,
                                      pixet.PX_FTYPE_AUTODETECT,
-                                     'output.pmf')
+                                     'output' + '-' + str(prev_file_time) + '.pmf')
     frame = device.lastAcqFrameRefInc()
 
     return frame.data()

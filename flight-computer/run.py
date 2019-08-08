@@ -7,6 +7,7 @@ import sys
 import smbus
 import pypixet
 import logging
+import csv
 
 from datetime import datetime
 from numpy import array, nonzero
@@ -132,15 +133,23 @@ class RPIDosimeter:
             mp_dose = (mp_total_energy/96081.3)/self.minipix.shutter_time
             logger.info("MP Pixel Count: {} MP Clusters: {} MP Total Energy: {:.5f} MP DoseRate: {}".format(mp_count, mp_frame.cluster_count, mp_total_energy, mp_dose*60))
 
+            with open('mp_clusters.csv', mode='a+') as mp_clusters_file:
+                data_writer = csv.writer(mp_clusters_file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
+                mp_clusters_file.write("\nMP Pixel Count: {} MP Clusters: {} MP Total Energy: {:.5f} MP DoseRate: {}".format(mp_count, mp_frame.cluster_count, mp_total_energy, mp_dose*60))
+            
             mp_cluster_counts = 0
             for i, mp_cluster in enumerate(mp_frame.clusters):
                 logger.info("\tCluster: {} Density: {:.2f} Energy: {:.5f}".format(i, mp_cluster.density, mp_cluster.energy))
+                with open('mp_clusters.csv', mode='a+') as mp_clusters_file:
+                    data_writer = csv.writer(mp_clusters_file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
+                    mp_clusters_file.write("\nCluster: {} Density: {:.2f} Energy: {:.5f}".format(i, mp_cluster.density, mp_cluster.energy))
                 mp_cluster_counts = i+1
 
             if packet is not None:
                 if packet.find('begin_pwm') is not -1:
                     storeInCSVFiles(packet)  # Send IV packet to CSV
                 else:
+                    #print(packet)
                     # Handle case when there are multiple packets grouped together
                     packet_arr = packet.split('\n')
                     packet_arr.pop(-1)
@@ -149,6 +158,7 @@ class RPIDosimeter:
                         if i > 0:
                             mp_dose = 0
                             mp_cluster_counts = 0
+                        # Add the RPI temp, MP data, and the timestamp
                         mp2_data = str(self.get_device_temp())+','+str(mp_dose)+','+str(mp_cluster_counts)
                         packet_from_array = packet_from_array[:packet_from_array.find(',')] + ',' + mp2_data + packet_from_array[packet_from_array.find(','):]
                         mp1_data = str(self.get_device_temp())+','+str(mp_dose)+','+str(mp_cluster_counts)
