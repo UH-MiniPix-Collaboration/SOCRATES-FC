@@ -93,6 +93,7 @@ void sweepCellGroup(int groupNum)
     Serial.print(",");
     }
   */
+  Serial.print("end_pwm");
   Serial.println();  // End each cell group with a newline
   delay(100);
 }
