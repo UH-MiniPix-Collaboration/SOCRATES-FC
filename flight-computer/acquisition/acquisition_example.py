@@ -11,7 +11,7 @@ pypixet.start()
 pixet = pypixet.pixet
 # first list all Medipix/Timepix devices and use the first one:
 devices = pixet.devices()
-
+print(devices)
 if not devices:
     raise Exception("No devices connected")
 device = devices[0]  # use  the first device

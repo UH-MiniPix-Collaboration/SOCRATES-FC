@@ -1,4 +1,4 @@
-################# LOG OPENED (16:53:38.079) ###################### 
-(16:53:38.080) [MSG]: Listing FTDI devices (libftdi)...
-(16:53:38.088) [MSG]: Device #0 "WidePIX MiniPIX TSWB sn: 0042"
-(16:53:38.088) [MSG]:     is Mpx2 device
+################# LOG OPENED (21:00:23.425) ###################### 
+(21:00:23.425) [MSG]: Listing FTDI devices (libftdi)...
+(21:00:23.439) [MSG]: Device #0 "WidePIX MiniPIX TSWB sn: 0042"
+(21:00:23.439) [MSG]:     is Mpx2 device

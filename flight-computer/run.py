@@ -56,21 +56,22 @@ class RPIDosimeter:
     def __init__(self):
         # Set up MiniPIX
         self.calibration = Calibration()
-        self.calibration.load_calib_a("/home/pi/Desktop/MiniPIX-RPI-Dosimeter/calibration/a.txt")
-        self.calibration.load_calib_b("/home/pi/Desktop/MiniPIX-RPI-Dosimeter/calibration/b.txt")
-        self.calibration.load_calib_c("/home/pi/Desktop/MiniPIX-RPI-Dosimeter/calibration/c.txt")
-        self.calibration.load_calib_t("/home/pi/Desktop/MiniPIX-RPI-Dosimeter/calibration/t.txt")
+        self.calibration.load_calib_a("/home/pi/SOCRATES-FC/flight-computer/calibration/a.txt")
+        self.calibration.load_calib_b("/home/pi/SOCRATES-FC/flight-computer/calibration/b.txt")
+        self.calibration.load_calib_c("/home/pi/SOCRATES-FC/flight-comptuer/calibration/c.txt")
+        self.calibration.load_calib_t("/home/pi/SOCRATES-FC/flight-computer/calibration/t.txt")
         # Initialize miniPIX driver subsystem
         pypixet.start()
         self.pixet = pypixet.pixet
         self.device = self.pixet.devices()[0]
-
+        print(self.pixet.devices())
+        
         if self.device.fullName() != "MiniPIX H06-W0239":
             print()
             logger.error("No minipix found exiting...")
             os.unlink(pidfile)
             exit(0)
-        self.device.loadConfigFromFile("calibration/MiniPIX-H06-W0239.xml")
+        self.device.loadConfigFromFile("/home/pi/SOCRATES-FC/flight-computer/calibration/MiniPIX-H06-W0239.xml")
 
         logger.info("Found device: {}".format(self.device.fullName()))
 
@@ -146,15 +147,17 @@ class RPIDosimeter:
                 mp_cluster_counts = i+1
 
             if packet is not None:
-                if packet.find('begin_pwm') is not -1:
-                    storeInCSVFiles(packet)  # Send IV packet to CSV
-                else:
-                    #print(packet)
-                    # Handle case when there are multiple packets grouped together
-                    packet_arr = packet.split('\n')
-                    packet_arr.pop(-1)
-                    logger.debug('packet_arr: ' + str(packet_arr))
-                    for i, packet_from_array in enumerate(packet_arr):
+                packet_arr = packet.split('\n')
+                packet_arr.pop(-1)
+                logger.debug('packet_arr: ' + str(packet_arr))
+                # Handle case when there are multiple packets grouped together
+                for i, packet_from_array in enumerate(packet_arr):
+                    if packet_from_array.find('begin_pwm') is not -1:
+                        logging.info('Sending cell packet to CSV:  \'' + str(packet_from_array) + '\'')
+                        storeInCSVFiles(packet_from_array + '\n')  # Send IV packet to CSV
+                        i = 0
+                    else:
+                        #print(packet)
                         if i > 0:
                             mp_dose = 0
                             mp_cluster_counts = 0

@@ -8,6 +8,7 @@ def minipix_init():
 
     # first list all Medipix/Timepix devices and use the first one:
     devices = pixet.devices()
+    print(devices)
     if not devices:
         raise Exception("No devices connected")
 
@@ -144,12 +145,12 @@ def detExample8():
 
 # ------------------------------------------------------------------------------------
 device = minipix_init()
-# detExample0()
+detExample0()
 detExample1()
 # detExample2()
 # detExample3()
 # detExample4()
 # detExample5()
 # detExample6()
-detExample7()
+# detExample7()
 # detExample8()

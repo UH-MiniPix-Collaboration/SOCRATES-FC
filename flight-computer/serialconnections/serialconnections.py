@@ -91,10 +91,16 @@ def packetHandler(arduino_serial_connection):
                         if p_string.count(',') % 15 == 0:  # It's a complete packet
                             completePacket = completePacket + p_string + '\n'
                             #p_array.remove(p_string)
-                    if completePacket.find(p_array[-1]) == -1:  # p_array still contains a string
+                    if completePacket.find(p_array[-1]) == -1:  # p_array still contains an incomplete packet
                         remainingString = p_array[-1]
                     else:
                         remainingString = ''
+
+                """
+                if completePacket.find('begin_pwm') == competePacket.find('\n') + 1:  # pwm packet following a data packet
+                    remainingString = completePacket[completePacket.find('begin_pwm'):] + remainingString
+                    completePacket = completePacket[:completePacket.find('\n')+ 1 ]
+                """                    
                 packetComplete = True
                 remainingBytes = b''
 
