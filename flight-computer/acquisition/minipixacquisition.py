@@ -62,7 +62,7 @@ class MiniPIXAcquisition(Thread):
         self.minipix.doSimpleAcquisition(1,
                                          self.shutter_time,
                                          self.pixet.PX_FTYPE_AUTODETECT,
-                                         'output' + '-' + str(prev_file_time) + '.pmf')
+                                         'mp_output' + '-' + str(prev_file_time) + '.pmf')
         frame = self.minipix.lastAcqFrameRefInc()
 
         return frame.data()
@@ -139,7 +139,7 @@ def take_acquisition(device, shutter_time, pixet):
     device.doSimpleAcquisition(1,
                                      shutter_time,
                                      pixet.PX_FTYPE_AUTODETECT,
-                                     'output' + '-' + str(prev_file_time) + '.pmf')
+                                     'mp_output' + '-' + str(prev_file_time) + '.pmf')
     frame = device.lastAcqFrameRefInc()
 
     return frame.data()

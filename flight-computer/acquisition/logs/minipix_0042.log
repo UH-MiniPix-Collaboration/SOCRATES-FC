@@ -1,34 +1,34 @@
-################# LOG OPENED (21:00:23.440) ###################### 
-(21:00:23.447) [DBG]: CMD 01 (Test) >>>
-(21:00:23.448) [DBG]: CMD 01 (Test) <<< 
-(21:00:23.449) [DBG]: CMD 01 (Test) >>>
-(21:00:23.450) [DBG]: CMD 01 (Test) <<< 
-(21:00:23.451) [DBG]: CMD 02 (FwInfo) >>>
-(21:00:23.452) [DBG]: CMD 02 (FwInfo) <<< 
-(21:00:23.453) [DBG]: Received data:
+################# LOG OPENED (21:15:45.297) ###################### 
+(21:15:45.302) [DBG]: CMD 01 (Test) >>>
+(21:15:45.302) [DBG]: CMD 01 (Test) <<< 
+(21:15:45.302) [DBG]: CMD 01 (Test) >>>
+(21:15:45.304) [DBG]: CMD 01 (Test) <<< 
+(21:15:45.304) [DBG]: CMD 02 (FwInfo) >>>
+(21:15:45.306) [DBG]: CMD 02 (FwInfo) <<< 
+(21:15:45.306) [DBG]: Received data:
    4d 69 6e 69 50 69 78 20 76 31 2e 32 20 28 31 38    |MiniPix.v1.2.(18   
    2e 30 32 2e 32 30 31 36 29 20 20 20 20 20          |.02.2016).....     
-(21:00:23.453) [MSG]: Firmware is: MiniPix v1.2 (18.02.2016)     
-(21:00:23.453) [DBG]: CMD 12 (GetSysFreq) >>>
-(21:00:23.454) [DBG]: CMD 12 (GetSysFreq) <<< 
-(21:00:23.455) [DBG]: Received data:
+(21:15:45.306) [MSG]: Firmware is: MiniPix v1.2 (18.02.2016)     
+(21:15:45.306) [DBG]: CMD 12 (GetSysFreq) >>>
+(21:15:45.308) [DBG]: CMD 12 (GetSysFreq) <<< 
+(21:15:45.308) [DBG]: Received data:
    48                                                 |H                  
-(21:00:23.455) [DBG]: CMD 03 (ResetTpx) >>>
-(21:00:23.456) [DBG]: CMD 03 (ResetTpx) <<< 
-(21:00:23.457) [DBG]: CMD 05 (ChipCount) >>>
-(21:00:23.458) [DBG]: CMD 05 (ChipCount) <<< 
-(21:00:23.459) [DBG]: Received data:
+(21:15:45.308) [DBG]: CMD 03 (ResetTpx) >>>
+(21:15:45.310) [DBG]: CMD 03 (ResetTpx) <<< 
+(21:15:45.310) [DBG]: CMD 05 (ChipCount) >>>
+(21:15:45.312) [DBG]: CMD 05 (ChipCount) <<< 
+(21:15:45.312) [DBG]: Received data:
    01                                                 |.                  
-(21:00:23.459) [DBG]: CMD 06 (ReadFSR) >>>
-(21:00:23.459) [DBG]: Sent data:
+(21:15:45.312) [DBG]: CMD 06 (ReadFSR) >>>
+(21:15:45.312) [DBG]: Sent data:
    00 21                                              |.!                 
-(21:00:23.460) [DBG]: CMD 06 (ReadFSR) <<< 
-(21:00:23.461) [DBG]: Received data:
+(21:15:45.314) [DBG]: CMD 06 (ReadFSR) <<< 
+(21:15:45.314) [DBG]: Received data:
    ff 00 00 00 00 00 16 f7 10 00 00 00 00 00 00 00    |................   
    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00    |................   
    01                                                 |.                  
    Bytes: 33
-(21:00:23.461) [DBG]: CMD 0E (SetTpxClock) >>>
-(21:00:23.461) [DBG]: Sent data:
+(21:15:45.314) [DBG]: CMD 0E (SetTpxClock) >>>
+(21:15:45.315) [DBG]: Sent data:
    98 96 80                                           |...                
-(21:00:23.462) [DBG]: CMD 0E (SetTpxClock) <<< 
+(21:15:45.316) [DBG]: CMD 0E (SetTpxClock) <<< 

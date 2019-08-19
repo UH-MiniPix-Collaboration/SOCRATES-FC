@@ -56,10 +56,10 @@ class RPIDosimeter:
     def __init__(self):
         # Set up MiniPIX
         self.calibration = Calibration()
-        self.calibration.load_calib_a("/home/pi/SOCRATES-FC/flight-computer/calibration/a.txt")
-        self.calibration.load_calib_b("/home/pi/SOCRATES-FC/flight-computer/calibration/b.txt")
-        self.calibration.load_calib_c("/home/pi/SOCRATES-FC/flight-comptuer/calibration/c.txt")
-        self.calibration.load_calib_t("/home/pi/SOCRATES-FC/flight-computer/calibration/t.txt")
+        self.calibration.load_calib_a("/home/pi/SOCRATES-FC/flight-computer/calibration/mp_a.txt")
+        self.calibration.load_calib_b("/home/pi/SOCRATES-FC/flight-computer/calibration/mp_b.txt")
+        self.calibration.load_calib_c("/home/pi/SOCRATES-FC/flight-computer/calibration/mp_c.txt")
+        self.calibration.load_calib_t("/home/pi/SOCRATES-FC/flight-computer/calibration/mp_t.txt")
         # Initialize miniPIX driver subsystem
         pypixet.start()
         self.pixet = pypixet.pixet
@@ -136,7 +136,7 @@ class RPIDosimeter:
 
             with open('mp_clusters.csv', mode='a+') as mp_clusters_file:
                 data_writer = csv.writer(mp_clusters_file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
-                mp_clusters_file.write("\nMP Pixel Count: {} MP Clusters: {} MP Total Energy: {:.5f} MP DoseRate: {}".format(mp_count, mp_frame.cluster_count, mp_total_energy, mp_dose*60))
+                mp_clusters_file.write("\n" + str(datetime.now().strftime(time_fmt)) + " MP Pixel Count: {} MP Clusters: {} MP Total Energy: {:.5f} MP DoseRate: {}".format(mp_count, mp_frame.cluster_count, mp_total_energy, mp_dose*60))
             
             mp_cluster_counts = 0
             for i, mp_cluster in enumerate(mp_frame.clusters):

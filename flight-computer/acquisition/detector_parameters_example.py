@@ -7,6 +7,7 @@ def minipix_init():
     pixet = pypixet.pixet
 
     # first list all Medipix/Timepix devices and use the first one:
+    print("Number of devices: " + str(pixet.deviceCount()))
     devices = pixet.devices()
     print(devices)
     if not devices:

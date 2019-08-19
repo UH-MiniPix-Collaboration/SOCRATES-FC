@@ -1,30 +1,30 @@
-################# LOG OPENED (21:00:23.421) ###################### 
-(21:00:23.422) [core]: Loading hw libraries (1)...
-(21:00:23.424) [core]: Added hw library minipix.so
-(21:00:23.463) [core]: Initializing hwlib minipix.so (1 devices)...
-(21:00:23.481) [core]: MiniPIX H06-W0239: No configuration for device MiniPIX-H06-W0239. Default will be used.
-(21:00:23.484) [core]: Stack Trace:
-1   0x76300468 ./pxcore.so(+0x30468) [0x76300468]
-2   0x762fffe8 ./pxcore.so(+0x2ffe8) [0x762fffe8]
-3   0x7630b8c8 ./pxcore.so(+0x3b8c8) [0x7630b8c8]
-4   0x7632375c ./pxcore.so(+0x5375c) [0x7632375c]
-5   0x76319ba0 ./pxcore.so(+0x49ba0) [0x76319ba0]
-6   0x7632ac2c ./pxcore.so(+0x5ac2c) [0x7632ac2c]
-7   0x7632a76c ./pxcore.so(+0x5a76c) [0x7632a76c]
-8   0x7632a2d4 ./pxcore.so(+0x5a2d4) [0x7632a2d4]
-9   0x763634b4 ./pxcore.so(+0x934b4) [0x763634b4]
-10  0x76364e68 pxInitialize + 44
-11  0x7695c850 PixetLoader::initPixet() + 100
-12  0x7695c214 /home/pi/SOCRATES-FC/flight-computer/acquisition/pypixet.so(+0x2f214) [0x7695c214]
+################# LOG OPENED (21:15:45.284) ###################### 
+(21:15:45.284) [core]: Loading hw libraries (1)...
+(21:15:45.285) [core]: Added hw library minipix.so
+(21:15:45.317) [core]: Initializing hwlib minipix.so (1 devices)...
+(21:15:45.325) [core]: MiniPIX H06-W0239: No configuration for device MiniPIX-H06-W0239. Default will be used.
+(21:15:45.326) [core]: Stack Trace:
+1   0x763d2468 ./pxcore.so(+0x30468) [0x763d2468]
+2   0x763d1fe8 ./pxcore.so(+0x2ffe8) [0x763d1fe8]
+3   0x763dd8c8 ./pxcore.so(+0x3b8c8) [0x763dd8c8]
+4   0x763f575c ./pxcore.so(+0x5375c) [0x763f575c]
+5   0x763ebba0 ./pxcore.so(+0x49ba0) [0x763ebba0]
+6   0x763fcc2c ./pxcore.so(+0x5ac2c) [0x763fcc2c]
+7   0x763fc76c ./pxcore.so(+0x5a76c) [0x763fc76c]
+8   0x763fc2d4 ./pxcore.so(+0x5a2d4) [0x763fc2d4]
+9   0x764354b4 ./pxcore.so(+0x934b4) [0x764354b4]
+10  0x76436e68 pxInitialize + 44
+11  0x76a2e850 PixetLoader::initPixet() + 100
+12  0x76a2e214 /home/pi/SOCRATES-FC/flight-computer/acquisition/pypixet.so(+0x2f214) [0x76a2e214]
 
 
-(21:00:23.778) [core]: Loading plugins (0)...
-(21:00:23.778) [core]: MiniPIX H06-W0239: File Fixed_Config_MiniPIX-H06-W0239.xml does not exist
-(21:00:23.780) [core]: Stack Trace:
-1   0x76300468 ./pxcore.so(+0x30468) [0x76300468]
-2   0x762fffe8 ./pxcore.so(+0x2ffe8) [0x762fffe8]
-3   0x7630b900 ./pxcore.so(+0x3b900) [0x7630b900]
-4   0x7632375c ./pxcore.so(+0x5375c) [0x7632375c]
-5   0x7698c5b4 /home/pi/SOCRATES-FC/flight-computer/acquisition/pypixet.so(+0x5f5b4) [0x7698c5b4]
+(21:15:45.585) [core]: Loading plugins (0)...
+(21:15:45.593) [core]: MiniPIX H06-W0239: File H06-W0239.xml does not exist
+(21:15:45.594) [core]: Stack Trace:
+1   0x763d2468 ./pxcore.so(+0x30468) [0x763d2468]
+2   0x763d1fe8 ./pxcore.so(+0x2ffe8) [0x763d1fe8]
+3   0x763dd900 ./pxcore.so(+0x3b900) [0x763dd900]
+4   0x763f575c ./pxcore.so(+0x5375c) [0x763f575c]
+5   0x76a5e5b4 /home/pi/SOCRATES-FC/flight-computer/acquisition/pypixet.so(+0x5f5b4) [0x76a5e5b4]
 
 
