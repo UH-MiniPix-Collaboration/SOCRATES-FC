@@ -55,5 +55,4 @@ def storeDataInDatabase(dataPacket):
     cursor.execute(sql, val)
     mariadb_connection.commit()
     mariadb_connection.close()
-    
     logger.debug('Wrote \'' + str(dataPacket) + '\' to mariadb')

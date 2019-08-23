@@ -59,10 +59,15 @@ class MiniPIXAcquisition(Thread):
 
         global prev_file_time
         set_file_time()
+        file_prefix = ''
+        if 'MiniPIX' in self.minipix.fullName():
+            file_prefix = 'mp'
+        elif 'FITPix' in self.minipix.fullName():
+            file_prefix = 'fp'
         self.minipix.doSimpleAcquisition(1,
                                          self.shutter_time,
                                          self.pixet.PX_FTYPE_AUTODETECT,
-                                         'mp_output' + '-' + str(prev_file_time) + '.pmf')
+                                         file_prefix + '_output' + '-' + str(prev_file_time) + '.pmf')
         frame = self.minipix.lastAcqFrameRefInc()
 
         return frame.data()
