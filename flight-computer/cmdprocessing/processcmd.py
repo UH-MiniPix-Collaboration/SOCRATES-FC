@@ -123,7 +123,7 @@ class HASPCommandHandler(Thread):
 
 if __name__ == "__main__":
     test_serial = SerialConnectionTest()
-
+    
     cmdHandler = HASPCommandHandler(test_serial)
     logger.info("Starting HASP command handler")
     cmdHandler.start()

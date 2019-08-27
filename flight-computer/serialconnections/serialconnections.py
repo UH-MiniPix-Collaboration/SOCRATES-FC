@@ -36,7 +36,7 @@ def connectToHASP():
     logger.info('Attempting connection with HASP.')
     ttySPortName = ''
     dirList = os.listdir('/dev/')
-    # Find all ttyUSB devices (i.e. connection via RS232)
+    # Find all ttyS devices (i.e. connection via RS232)
     for name in dirList:
         if 'ttyS' in name:
             ttySPortName = '/dev/' + name
@@ -80,14 +80,14 @@ def packetHandler(arduino_serial_connection):
             else:
                 completePacket = remainingString + packet[:eopIndex+1]
                 remainingString = packet[eopIndex+1:]
-                print('remainingstring: ' + remainingString)
+                #print('remainingstring: ' + remainingString)
                 if remainingString.find('\n') is not -1 and completePacket.find('begin_pwm') is -1:  # There exists more than one packet in this string
                     p_array = remainingString.split('\n')
                     p_array.pop(-1)  # Remove empty element
-                    print(p_array)
+                    #print(p_array)
                     for p_string in p_array:
-                        print('p_string: ' + p_string)
-                        print(p_string.count(','))
+                        #print('p_string: ' + p_string)
+                        #print(p_string.count(','))
                         if p_string.count(',') % 15 == 0:  # It's a complete packet
                             completePacket = completePacket + p_string + '\n'
                             #p_array.remove(p_string)

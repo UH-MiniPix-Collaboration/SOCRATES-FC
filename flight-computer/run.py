@@ -44,7 +44,7 @@ pid = str(os.getpid())
 pidfile = "/tmp/fc.pid"
 
 if os.path.isfile(pidfile):
-    print ("%s already exists, exiting" % pidfile)
+    logger.info ("%s already exists, exiting" % pidfile)
     sys.exit()
 pidf = open(pidfile, 'w')
 pidf.write(pid)
@@ -167,7 +167,7 @@ class RPIDosimeter:
                     mp_clusters_file.write("\nCluster: {} Density: {:.2f} Energy: {:.5f}".format(i, mp_cluster.density, mp_cluster.energy))
                 mp_cluster_counts = i+1
 
-                
+
             fp_acq, fp_count = self.fitpix.get_last_acquisition(block=True)
             fp_arr = array(fp_acq)
             fp_energy = self.fp_calibration.apply_calibration(fp_arr)
@@ -188,8 +188,7 @@ class RPIDosimeter:
                     data_writer = csv.writer(fp_clusters_file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
                     fp_clusters_file.write("\nCluster: {} Density: {:.2f} Energy: {:.5f}".format(i, fp_cluster.density, fp_cluster.energy))
                 fp_cluster_counts = i+1
-                
-            
+
             if packet is not None:
                 packet_arr = packet.split('\n')
                 packet_arr.pop(-1)
@@ -217,8 +216,7 @@ class RPIDosimeter:
                         if packet_from_array.count(',') == 23:  # final check to ensure that the packet is the proper size
                             storeDataInDatabase(packet_from_array)
                             downlinkPacket(self.hasp_serial_connection, packet_from_array + '\n')
-
-
+                            
 
     def shutdown(self):
         print("Stopping acquisitions...")

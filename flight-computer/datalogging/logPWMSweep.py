@@ -31,8 +31,8 @@ def checkPWMTime(arduino_serial_conn):
     currentTime = datetime.strptime(datetime.now().strftime(time_fmt), time_fmt)
     currentTime_ts = time.mktime(currentTime.timetuple())
     if previousSweepTime is not None:
-        logger.debug(str(int(currentTime_ts - previousSweepTime)) + ' seconds remaining until next sweep.')
-    if previousSweepTime is None or int(currentTime_ts - previousSweepTime) >= 60:
+        logger.debug(str(1800 - int(currentTime_ts - previousSweepTime)) + ' seconds remaining until next sweep.')
+    if previousSweepTime is None or int(currentTime_ts - previousSweepTime) >= 1800:
         previousSweepTime = currentTime_ts
         performSweep(arduino_serial_conn)
 

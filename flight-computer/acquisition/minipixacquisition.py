@@ -1,4 +1,5 @@
 import time
+import multiprocessing
 from threading import Thread, Event
 from Queue import Queue
 from random import randint
@@ -6,13 +7,14 @@ from datetime import datetime
 
 from numpy import nonzero
 
+from pympler import asizeof, tracker
+
 DESIRED_DETECTOR_AREA_3_PERCENT = 1966  # 3% of the detector area in pixels
 DESIRED_DETECTOR_AREA_4_PERCENT = 2621
 DESIRED_DETECTOR_AREA_5_PERCENT = 3276
 
 time_fmt = '%Y-%m-%d_%H:%M:%S'
 prev_file_time = datetime.strptime(datetime.now().strftime(time_fmt), time_fmt)
-
 
 
 def set_file_time():
@@ -23,6 +25,23 @@ def set_file_time():
         prev_file_time = datetime.strptime(datetime.now().strftime(time_fmt), time_fmt)
 
 
+def get_frame_data(dev, conn):
+#    print('in the process')
+    #try:
+    frame = dev.lastAcqFrameRefInc()
+    f_data = frame.data()
+    conn.send(f_data)
+    conn.close()
+    #except Exception as e:
+    #print(e)
+#    print('exitting the process')
+
+
+def put_into_queue(q, acq, counts, conn):
+    q.put(acq, counts)
+    conn.send(q)
+    conn.close()
+    
 class MiniPIXAcquisition(Thread):
     def __init__(self,
                  minipix,
@@ -68,9 +87,25 @@ class MiniPIXAcquisition(Thread):
                                          self.shutter_time,
                                          self.pixet.PX_FTYPE_AUTODETECT,
                                          file_prefix + '_output' + '-' + str(prev_file_time) + '.pmf')
-        frame = self.minipix.lastAcqFrameRefInc()
+        paren_conn ,child_conn = multiprocessing.Pipe()
+        frame_thread_process = multiprocessing.Process(target = get_frame_data, args = (self.minipix, child_conn,))
+        #print('start')
+        frame_thread_process.start()
+        frame_data = paren_conn.recv()
+        frame_thread_process.terminate()
+        #print('killed')
+        
+        #print(len(frame_data))
+    
 
-        return frame.data()
+        """
+        parent_conn, child_conn = multiprocessing.Pipe()
+        frame_data_process = multiprocessing.Process(target = get_frame_data, args = (self.minipix, child_conn,))
+        frame_data_process.start()
+        frame_data = parent_conn.recv()
+        frame_data_process.terminate()
+        """
+        return frame_data
 
     @staticmethod
     def _total_hit_pixels(frame):
@@ -105,8 +140,16 @@ class MiniPIXAcquisition(Thread):
     def _constant_frame_rate(self):
         while not self.stop_acquisitions.is_set():
             acq = self._take_aquisition()
+            """
+            parent_conn, child_conn = multiprocessing.Pipe()
+            queue_process = multiprocessing.Process(target = put_into_queue, args = (self.data, acq, self._total_hit_pixels(acq), child_conn,))
+            queue_process.start()
+            self.data = parent_conn.recv()
+            queue_process.terminate()
+            """
             self.data.put((acq, self._total_hit_pixels(acq)))
-
+            #print(self.data.qsize())
+            
     def _begin_acquisitions(self):
         if self.variable:
             self._variable_frame_rate()
@@ -141,10 +184,15 @@ def take_acquisition(device, shutter_time, pixet):
 
     global prev_file_time
     set_file_time()
-    device.doSimpleAcquisition(1,
-                                     shutter_time,
-                                     pixet.PX_FTYPE_AUTODETECT,
-                                     'mp_output' + '-' + str(prev_file_time) + '.pmf')
-    frame = device.lastAcqFrameRefInc()
-
+    file_prefix = ''
+    if 'MiniPIX' in self.device.fullName():
+        file_prefix = 'mp'
+    elif 'FITPix' in self.device.fullName():
+        file_prefix = 'fp'
+    self.device.doSimpleAcquisition(1,
+                                     self.shutter_time,
+                                     self.pixet.PX_FTYPE_AUTODETECT,
+                                     file_prefix + '_output' + '-' + str(prev_file_time) + '.pmf')
+    #frame = self.device.lastAcqFrameRefInc()
+    
     return frame.data()

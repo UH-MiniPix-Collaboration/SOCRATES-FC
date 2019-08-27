@@ -28,7 +28,7 @@ dir = os.getcwd()
 pidfile = "/tmp/fc.pid"
 
 while True:
-    sleep(0.2)
+    sleep(1)
     if os.path.isfile(pidfile):
         logger.info("run.py is running")
     else:
